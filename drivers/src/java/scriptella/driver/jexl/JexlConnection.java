@@ -40,8 +40,8 @@ import java.util.Map;
  * @version 1.0
  */
 public class JexlConnection extends AbstractConnection {
-    private Map<Resource, Script> cache = new IdentityHashMap<Resource, Script>();
-    //Use the same factory method as in JexlExpression to share functions etc. 
+    private Map<Resource, Script> cache = new IdentityHashMap<>();
+    //Use the same factory method as in JexlExpression to share functions etc.
     private static final JexlEngine jexlEngine = JexlExpression.newJexlEngine();
 
     /**

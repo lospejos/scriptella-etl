@@ -45,7 +45,7 @@ import java.util.Properties;
  * @version 1.0
  */
 public class AllJDBCDriversTest extends AbstractTestCase {
-    private static List<Object[]> rows = new ArrayList<Object[]>(); //modified by janino
+    private static List<Object[]> rows = new ArrayList<>(); //modified by janino
     private static final byte[] blob=new byte[100000];
     private static final String clob;
     private static final String[] drivers;
@@ -122,12 +122,12 @@ public class AllJDBCDriversTest extends AbstractTestCase {
         return cf;
     }
 
-    public void test() throws EtlExecutorException, ClassNotFoundException {
+    public void test() throws EtlExecutorException {
         int n = drivers.length;
         //just to make sure properties are valid
         assertTrue(n == urls.length && n == users.length && n == passwords.length);
 
-        externalProperties = new HashMap<String, Object>();
+        externalProperties = new HashMap<>();
         //test any combination of drivers in both directions
         for (int i = 0; i < n; i++) {
             externalProperties.put("driver1", drivers[i]);
@@ -162,10 +162,10 @@ public class AllJDBCDriversTest extends AbstractTestCase {
     }
 
     protected void setUp() throws Exception {
-        connections = new ArrayList<Connection>(drivers.length);
+        connections = new ArrayList<>(drivers.length);
         //Initialize drivers one by one
         Properties p = new Properties();
-        externalProperties = new HashMap<String, Object>();
+        externalProperties = new HashMap<>();
         for (int i = 0; i < drivers.length; i++) {
             String driver = drivers[i];
             String url = urls[i];
@@ -194,7 +194,7 @@ public class AllJDBCDriversTest extends AbstractTestCase {
         }
     }
 
-    protected void tearDown() throws Exception {
+    protected void tearDown() {
         for (Connection connection : connections) {
             JdbcUtils.closeSilent(connection);
         }

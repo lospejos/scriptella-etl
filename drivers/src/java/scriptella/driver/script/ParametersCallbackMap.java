@@ -57,7 +57,7 @@ public class ParametersCallbackMap implements ParametersCallback, Map<String, Ob
     /**
      * Initializes parameters callback for query element.
      * @param parentParameters parent parameters.
-     * @param queryCallback callback to notify on row iteration. 
+     * @param queryCallback callback to notify on row iteration.
      */
     public ParametersCallbackMap(ParametersCallback parentParameters, QueryCallback queryCallback) {
         this.parentParameters = parentParameters;
@@ -106,7 +106,7 @@ public class ParametersCallbackMap implements ParametersCallback, Map<String, Ob
      */
     public Object put(String key, Object value) {
         if (localVariables == null) {
-            localVariables = new HashMap<String, Object>();
+            localVariables = new HashMap<>();
         }
         return localVariables.put(key, value);
     }
@@ -128,7 +128,7 @@ public class ParametersCallbackMap implements ParametersCallback, Map<String, Ob
      */
     public void putAll(Map<? extends String, ?> t) {
         if (localVariables == null) {
-            localVariables = new HashMap<String, Object>();
+            localVariables = new HashMap<>();
         }
         localVariables.putAll(t);
     }

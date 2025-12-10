@@ -21,8 +21,9 @@ import scriptella.expression.Expression;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -33,8 +34,8 @@ import java.util.logging.Logger;
  * @see scriptella.expression.JexlExpression
  */
 public final class IfInterceptor extends ElementInterceptor {
-    private static final Logger LOG = Logger.getLogger(IfInterceptor.class.getName());
-    private static final Set<CharSequence> trueStrs = new LinkedHashSet<CharSequence>();
+    private static final Logger LOG = LoggerFactory.getLogger(IfInterceptor.class.getName());
+    private static final Set<CharSequence> trueStrs = new LinkedHashSet<>();
 
     static {
         trueStrs.add("true");
@@ -66,7 +67,7 @@ public final class IfInterceptor extends ElementInterceptor {
                 }
             }
         } catch (Expression.EvaluationException e) {
-            LOG.log(Level.WARNING,
+            LOG.warn(
                     "Unable to evaluate if condition \"" +
                             expression.getExpression() + "\" for script " + location +
                             ": " + e.getMessage(), e);
@@ -75,8 +76,8 @@ public final class IfInterceptor extends ElementInterceptor {
         if (ok) { //if expr evaluated to true
             executeNext(ctx);
         } else {
-            if (LOG.isLoggable(Level.FINE)) {
-                LOG.fine("if=\""+expression.getExpression()+"\" is false, element body is skipped.");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("if=\""+expression.getExpression()+"\" is false, element body is skipped.");
             }
         }
     }

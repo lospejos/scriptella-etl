@@ -72,7 +72,7 @@ public class ColumnsMap {
         if (map==null) {
             return Collections.emptyMap();
         }
-        Map<Integer, String> m = new HashMap<Integer, String>();
+        Map<Integer, String> m = new HashMap<>();
 
         for (Map.Entry<String, Integer> e : map.entrySet()) {
             m.put(e.getValue(), e.getKey());

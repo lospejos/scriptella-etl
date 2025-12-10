@@ -28,7 +28,7 @@ import java.util.Map;
  */
 public class TypedPropertiesSourceTest extends TestCase {
     public void testParseBooleanProperty() {
-        Map<String, Object> p = new HashMap<String, Object>();
+        Map<String, Object> p = new HashMap<>();
         TypedPropertiesSource ps = new TypedPropertiesSource(p);
 
         p.put("v", " true");

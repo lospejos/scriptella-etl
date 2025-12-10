@@ -24,10 +24,12 @@
         <property name="autostart" value="true"/>
     </bean>
     <bean class="scriptella.driver.spring.BatchEtlExecutorBean" init-method="run">
-        <property name="configLocations"><list>
-            <value>/scriptella/driver/spring/batch1.etl.xml</value>
-            <value>/scriptella/driver/spring/batch2.etl.xml</value>
-        </list></property>
+        <property name="configLocations">
+            <list>
+                <value>/scriptella/driver/spring/batch1.etl.xml</value>
+                <value>/scriptella/driver/spring/batch2.etl.xml</value>
+            </list>
+        </property>
         <property name="properties">
             <map>
                 <entry key="tableName" value="Batch"/>

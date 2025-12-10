@@ -24,8 +24,9 @@ import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -38,7 +39,7 @@ public class IncludeEl extends XmlConfigurableBase implements Resource {
     private URL url;
     private String href;
     private String charset;
-    private static final Logger LOG = Logger.getLogger(IncludeEl.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(IncludeEl.class.getName());
     private FallbackEl fallbackEl;
     private PropertiesSubstitutor substitutor;
 
@@ -105,7 +106,7 @@ public class IncludeEl extends XmlConfigurableBase implements Resource {
             throw (IOException) new IOException("Malformed include url: " + href).initCause(e);
         } catch (IOException e) {
             if (fallbackEl != null) {
-                LOG.log(Level.FINE, e.getMessage());
+                LOG.debug(e.getMessage());
                 return fallbackEl.open();
             } else {
                 throw e;

@@ -16,9 +16,12 @@
 
 package scriptella;
 
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.Appender;
+import ch.qos.logback.core.AppenderBase;
+
+import org.slf4j.LoggerFactory;
 
 /**
  * Logging configurer which keeps messages sent to a specified logger.
@@ -26,36 +29,47 @@ import java.util.logging.Logger;
  * @author Fyodor Kupolov
  */
 public class TestLoggingConfigurer {
+
     public static final int MAX_LOG_MESSAGEBUFFER_SIZE = 100000; //100 KB
-    private String loggerName;
-    private boolean oldUseParent;
-    private TestHandler handler;
+    public final StringBuilder buf = new StringBuilder();
+
+    private final String loggerName;
+    private final Appender<ILoggingEvent> handler = new AppenderBase<>() {
+
+        @Override
+        protected void append(ILoggingEvent iLoggingEvent) {
+            buf.append(iLoggingEvent.getLoggerName()).append('|')
+                    .append(iLoggingEvent.getLevel()).append('|')
+                    .append(iLoggingEvent.getMessage()).append('\n');
+            if (buf.length() > MAX_LOG_MESSAGEBUFFER_SIZE) {
+                buf.delete(0, buf.length() / 2);
+            }
+        }
+    };
 
     public TestLoggingConfigurer(String loggerName) {
         this.loggerName = loggerName;
     }
 
     public void setUp() {
-        final Logger logger = Logger.getLogger(loggerName);
-        oldUseParent = logger.getUseParentHandlers();
-        logger.setUseParentHandlers(true);
-        handler = new TestHandler();
-        logger.addHandler(handler);
+        final Logger logger = (Logger) LoggerFactory.getLogger(loggerName);
+
+        handler.setContext(logger.getLoggerContext());
+        handler.setName(loggerName);
+        handler.start();
+
+        logger.addAppender(handler);
     }
 
     public void tearDown() {
-        if (handler != null) {
-            final Logger logger = Logger.getLogger(loggerName);
-            logger.setUseParentHandlers(oldUseParent);
-            logger.removeHandler(handler);
-            handler = null;
-        }
+        final Logger logger = (Logger) LoggerFactory.getLogger(loggerName);
+        logger.detachAppender(loggerName);
     }
 
     public int getMessageCount(String msg) {
         int count = 0;
         for (int nextIndex = 0; nextIndex >= 0; ) {
-            nextIndex = handler.buf.indexOf(msg, nextIndex);
+            nextIndex = buf.indexOf(msg, nextIndex);
             if (nextIndex >= 0) {
                 nextIndex += msg.length();
                 count++;
@@ -64,23 +78,4 @@ public class TestLoggingConfigurer {
         return count;
     }
 
-    private static class TestHandler extends Handler {
-        StringBuilder buf = new StringBuilder();
-
-        @Override
-        public void publish(LogRecord record) {
-            buf.append(record.getLoggerName()).append('|').append(record.getLevel()).append('|').append(record.getMessage()).append('\n');
-            if (buf.length() > MAX_LOG_MESSAGEBUFFER_SIZE) {
-                buf.delete(0, buf.length() / 2);
-            }
-        }
-
-        @Override
-        public void flush() {
-        }
-
-        @Override
-        public void close() throws SecurityException {
-        }
-    }
 }

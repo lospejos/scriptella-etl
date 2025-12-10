@@ -38,11 +38,11 @@ public class EtlVariableITest extends AbstractTestCase {
         super.setUp();
         out = new ByteArrayOutputStream();
         testURLHandler = new TestURLHandler() {
-            public InputStream getInputStream(URL u) throws IOException {
+            public InputStream getInputStream(URL u) {
                 return null;
             }
 
-            public OutputStream getOutputStream(URL u) throws IOException {
+            public OutputStream getOutputStream(URL u) {
                 return out;
             }
 

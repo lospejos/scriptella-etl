@@ -74,7 +74,7 @@ public class CsvConnectionPerfTest extends AbstractTestCase {
      */
     public void testQuery() {
         //Create a configuration with non default values
-        Map<String, String> props = new HashMap<String, String>();
+        Map<String, String> props = new HashMap<>();
         ConnectionParameters cp = new ConnectionParameters(new MockConnectionEl(props, "tst://file"), MockDriverContext.INSTANCE);
 
         CsvConnection con = new CsvConnection(cp);
@@ -101,11 +101,10 @@ public class CsvConnectionPerfTest extends AbstractTestCase {
      * History:
      * 11.09.2006 - Duron 1.7Mhz - 844 ms
      * 09.09.2006 - Duron 1.7Mhz - 875 ms
-     * @throws UnsupportedEncodingException
      */
-    public void testScript() throws UnsupportedEncodingException {
+    public void testScript() {
         //Create a configuration with non default values
-        Map<String, String> props = new HashMap<String, String>();
+        Map<String, String> props = new HashMap<>();
         ConnectionParameters cp = new ConnectionParameters(new MockConnectionEl(props, "tst://file"), MockDriverContext.INSTANCE);
 
         CsvConnection con = new CsvConnection(cp);

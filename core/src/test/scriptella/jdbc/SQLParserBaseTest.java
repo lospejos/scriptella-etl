@@ -53,9 +53,9 @@ public class SQLParserBaseTest extends AbstractTestCase {
                 " //comment$justatext ?{justatext} ?justatext\n"};
 
 
-        final Set<String> exprSet = new TreeSet<String>();
+        final Set<String> exprSet = new TreeSet<>();
         exprSet.add("extra");
-        final Set<String> propSet = new TreeSet<String>();
+        final Set<String> propSet = new TreeSet<>();
         propSet.add("1");
         propSet.add("value");
         propSet.add("VALUE");

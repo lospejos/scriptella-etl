@@ -33,7 +33,7 @@ import java.sql.SQLException;
  * @version 1.0
  */
 public class SpringDriverTest extends AbstractTestCase {
-    public void test() throws SQLException, ClassNotFoundException, EtlExecutorException {
+    public void test() throws SQLException, EtlExecutorException {
         BeanFactory bf = new ClassPathXmlApplicationContext("scriptella/driver/spring/springbeans.xml");
         DataSource ds = (DataSource) bf.getBean("datasource"); //Test if bean factory contain correct data
         Connection con = ds.getConnection();

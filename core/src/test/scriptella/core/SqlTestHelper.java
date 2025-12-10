@@ -26,9 +26,9 @@ import java.util.Map;
  * Utility class provides accessors for SQLEngine internal state.
  */
 public class SqlTestHelper {
-    public static Map<String, ConnectionManager> getConnections(
-            final Session engine) {
-        return engine.managedConnections;
+
+    public static Map<String, ConnectionManager> getConnections( final Session engine) {
+        return engine.getManagedConnections();
     }
 
     public static Connection getConnection(final ConnectionManager cf) {

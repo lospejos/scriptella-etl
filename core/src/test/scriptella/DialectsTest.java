@@ -40,15 +40,10 @@ public class DialectsTest extends DBTestCase {
         se.execute();
 
         QueryHelper s = new QueryHelper("select * from test");
-        final Set expected = new HashSet<Integer>(Arrays.asList(1, 3, 4, 5, 6, 7, 9, 11));
-        final Set actual = new HashSet<Integer>();
+        final Set<Integer> expected = new HashSet<>(Arrays.asList(1, 3, 4, 5, 6, 7, 9, 11));
+        final Set<Integer> actual = new HashSet<>();
 
-        s.execute(con,
-                new QueryCallback() {
-                    public void processRow(final ParametersCallback row) {
-                        actual.add(row.getParameter("ID"));
-                    }
-                });
+        s.execute(con, row -> actual.add((Integer) row.getParameter("ID")));
         assertEquals(expected, actual);
     }
 
@@ -58,15 +53,10 @@ public class DialectsTest extends DBTestCase {
         se.execute();
 
         QueryHelper s = new QueryHelper("select * from test2");
-        final Set expected = new HashSet<Integer>(Arrays.asList(1, 2));
-        final Set actual = new HashSet<Integer>();
+        final Set<Integer> expected = new HashSet<>(Arrays.asList(1, 2));
+        final Set<Integer> actual = new HashSet<>();
 
-        s.execute(con,
-                new QueryCallback() {
-                    public void processRow(final ParametersCallback row) {
-                        actual.add(row.getParameter("ID"));
-                    }
-                });
+        s.execute(con, row -> actual.add((Integer) row.getParameter("ID")));
         assertEquals(expected, actual);
     }
 }

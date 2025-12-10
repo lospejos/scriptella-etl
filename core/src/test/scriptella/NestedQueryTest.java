@@ -39,11 +39,11 @@ public class NestedQueryTest extends DBTestCase {
         se.execute();
 
         QueryHelper s = new QueryHelper("select * from result");
-        final Set<Integer> ids = new HashSet<Integer>();
-        Set<Integer> expectedIds = new HashSet<Integer>(Arrays.asList(
+        final Set<Integer> ids = new HashSet<>();
+        Set<Integer> expectedIds = new HashSet<>(Arrays.asList(
                 new Integer[]{1, 3}));
-        final Set<String> texts = new HashSet<String>();
-        Set<String> expectedTexts = new HashSet<String>(Arrays.asList(
+        final Set<String> texts = new HashSet<>();
+        Set<String> expectedTexts = new HashSet<>(Arrays.asList(
                 new String[]{"One", "Three"}));
 
         s.execute(con,
@@ -69,8 +69,8 @@ public class NestedQueryTest extends DBTestCase {
         se.execute();
 
         QueryHelper s = new QueryHelper("select * from test");
-        final Set<Integer> ids = new HashSet<Integer>();
-        Set<Integer> expectedIds = new HashSet<Integer>(Arrays.asList(
+        final Set<Integer> ids = new HashSet<>();
+        Set<Integer> expectedIds = new HashSet<>(Arrays.asList(
                 new Integer[]{5, 7, 13, 15, 2, 6}));
 
         s.execute(con,
@@ -93,8 +93,8 @@ public class NestedQueryTest extends DBTestCase {
         se.execute();
 
         QueryHelper s = new QueryHelper("select * from Result");
-        final Set<Integer> ids = new HashSet<Integer>();
-        Set<Integer> expectedIds = new HashSet<Integer>(Arrays.asList(
+        final Set<Integer> ids = new HashSet<>();
+        Set<Integer> expectedIds = new HashSet<>(Arrays.asList(
                 new Integer[]{1, 2, 3, 11, 12, 13}));
 
         s.execute(con,

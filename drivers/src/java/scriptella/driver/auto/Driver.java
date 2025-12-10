@@ -31,7 +31,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Scriptella autodiscovery driver.
@@ -41,9 +43,9 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 public class Driver extends AbstractScriptellaDriver {
-    private static Logger LOG = Logger.getLogger(Driver.class.getName());
+    private static Logger LOG = LoggerFactory.getLogger(Driver.class.getName());
 
-    private static final Map<String, String> MAPPINGS = new HashMap<String, String>();
+    private static final Map<String, String> MAPPINGS = new HashMap<>();
 
     private static final String AUTO_URL_PROPERTIES = "scriptella/driver/auto/url.properties";
 
@@ -52,7 +54,7 @@ public class Driver extends AbstractScriptellaDriver {
         try {
             List<URL> resources = Collections.list(Driver.class.getClassLoader().getResources(AUTO_URL_PROPERTIES));
 
-            LOG.fine("Loading autodiscovery properties from " + resources);
+            LOG.info("Loading autodiscovery properties from " + resources);
             for (URL resource : resources) {
                 Properties p = new Properties();
                 p.load(resource.openStream());

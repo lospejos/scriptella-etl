@@ -26,9 +26,11 @@ import scriptella.util.ExceptionUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Query for CSV file.
@@ -37,7 +39,7 @@ import java.util.regex.Pattern;
  * @version 1.0
  */
 public class CsvQuery implements ParametersCallback {
-    protected static final Logger LOG = Logger.getLogger(CsvQuery.class.getName());
+    protected static final Logger LOG = LoggerFactory.getLogger(CsvQuery.class.getName());
     private ColumnsMap columnsMap; //column_name->column_number mapping
     private String[] row;
     private Pattern[][] patterns;
@@ -197,7 +199,7 @@ public class CsvQuery implements ParametersCallback {
             }
             if (patterns != null) { //if the line has at least on not empty pattern
                 if (res == null) {
-                    res = new ArrayList<Pattern[]>();
+                    res = new ArrayList<>();
                 }
                 res.add(patterns);
             }

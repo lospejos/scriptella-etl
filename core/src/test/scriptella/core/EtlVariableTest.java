@@ -46,7 +46,7 @@ public class EtlVariableTest extends AbstractTestCase {
         EtlVariable.DateUtils d = new EtlVariable().getDate();
         assertTrue(d.now().getTime() <= System.currentTimeMillis());
         assertEquals("2007", d.format(d.parse("18.03.2007", "dd.MM.yyyy"), "yyyy"));
-        //Tests if today method returns correct year 
+        //Tests if today method returns correct year
         assertTrue(d.today().indexOf(d.now("yyyy")) > 0);
     }
 
@@ -69,7 +69,7 @@ public class EtlVariableTest extends AbstractTestCase {
         o = Expression.compile("etl.text.ifNull(a,1)").evaluate(params);
         assertEquals(1, o);
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("a", 2);
         map.put(EtlVariable.NAME, new EtlVariable());
         ParametersCallback parametersCallback = MockParametersCallbacks.fromMap(map);

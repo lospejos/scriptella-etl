@@ -134,7 +134,7 @@ public class LdifReader implements Iterator<Entry>, Iterable<Entry> {
     /**
      * A list of read lines
      */
-    private final List<String> lines=new ArrayList<String>();
+    private final List<String> lines= new ArrayList<>();
 
     /**
      * The ldif file version default value
@@ -997,7 +997,7 @@ public class LdifReader implements Iterator<Entry>, Iterable<Entry> {
      */
     List<Entry> asList() {
         // Create a list that will contain the read entries
-        List<Entry> entries = new ArrayList<Entry>();
+        List<Entry> entries = new ArrayList<>();
 
         // When done, get the entries one by one.
         while (hasNext()) {

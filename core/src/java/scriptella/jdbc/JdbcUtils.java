@@ -69,5 +69,5 @@ public final class JdbcUtils {
         } catch (SQLException e) {
         }
     }
-    
+
 }

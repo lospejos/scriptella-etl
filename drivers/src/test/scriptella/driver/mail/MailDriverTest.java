@@ -35,7 +35,7 @@ public class MailDriverTest extends AbstractTestCase {
      */
     public void test() {
         Driver d = new Driver();
-        Map<String, String> parameters = new HashMap<String, String>();
+        Map<String, String> parameters = new HashMap<>();
         ConnectionParameters cp = new ConnectionParameters(new MockConnectionEl(parameters,
                 "mailto:scriptella@gmail.com"), MockDriverContext.INSTANCE);
         d.connect(cp);

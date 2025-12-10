@@ -95,7 +95,7 @@ public class CsvQueryTest extends AbstractTestCase {
     /**
      * Tests if invalid queries are recognized.
      */
-    public void testInvalidQuery() throws IOException {
+    public void testInvalidQuery() {
         String query = "\\"; //bad query
         try {
             final CsvConnectionParameters cp = new CsvConnectionParameters();

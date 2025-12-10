@@ -68,7 +68,7 @@ public class ConsoleAdapters {
             super(System.in, charsetName);
         }
 
-        public void close() throws IOException {
+        public void close() {
         }
     }
 
@@ -78,7 +78,7 @@ public class ConsoleAdapters {
     static class SystemOutWriter extends OutputStreamWriter {
 
 
-        public SystemOutWriter() throws UnsupportedEncodingException {
+        public SystemOutWriter() {
             super(System.out);
         }
 

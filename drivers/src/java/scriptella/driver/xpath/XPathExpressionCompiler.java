@@ -32,7 +32,7 @@ import java.util.Map;
 class XPathExpressionCompiler {
     private static final int DEFAULT_SIZE = 100;
     private static final XPathFactory XPATH_FACTORY = XPathFactory.newInstance();
-    private Map<String, XPathExpression> cache = new LRUMap<String, XPathExpression>(DEFAULT_SIZE);
+    private Map<String, XPathExpression> cache = new LRUMap<>(DEFAULT_SIZE);
 
     public XPathExpression compile(final String expression) {
         String trimmedEx = expression.trim();

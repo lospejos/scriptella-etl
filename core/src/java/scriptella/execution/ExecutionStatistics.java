@@ -37,7 +37,7 @@ import java.util.Map;
  */
 public class ExecutionStatistics {
     int statements;
-    Map<String, ElementInfo> elements = new LinkedHashMap<String, ElementInfo>();
+    Map<String, ElementInfo> elements = new LinkedHashMap<>();
     private Date started;
     private Date finished;
     private static final int MINUTE_MILLIS = 60 * 1000;
@@ -65,7 +65,7 @@ public class ExecutionStatistics {
      * @return xmlelement->count map .
      */
     public Map<String, Integer> getCategoriesStatistics() {
-        Map<String, Integer> res = new HashMap<String, Integer>();
+        Map<String, Integer> res = new HashMap<>();
         for (String xpath : elements.keySet()) {
             String elementName = getElementName(xpath);
             Integer cnt = res.get(elementName);
@@ -84,7 +84,7 @@ public class ExecutionStatistics {
         }
         StringBuilder sb = new StringBuilder(1024);
         NumberFormat doubleFormat = new DecimalFormat(DOUBLE_FORMAT_PTR);
-        sb.append("Executed ");
+        sb.append("\nExecuted ");
 
         Map<String, Integer> cats = getCategoriesStatistics();
         for (Iterator<Map.Entry<String, Integer>> it = cats.entrySet().iterator(); it.hasNext();) {
@@ -128,7 +128,7 @@ public class ExecutionStatistics {
             if (throughput >= 0) {
                 sb.append(" Avg throughput: ").append(doubleFormat.format(throughput)).append(" statements/sec.");
             }
-            sb.append('\n');
+            sb.append("\n");
 
         }
         long totalTime = getTotalTime();
@@ -136,6 +136,7 @@ public class ExecutionStatistics {
             sb.append("Total working time:");
             appendTotalTimeDuration(totalTime, sb, doubleFormat);
         }
+        sb.append("\n");
         return sb.toString();
     }
 

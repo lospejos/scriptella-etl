@@ -43,10 +43,10 @@ public class XPathQueryExecutorTest extends AbstractTestCase {
 
     protected void setUp() throws Exception {
         documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        context = new ThreadLocal<Node>();
+        context = new ThreadLocal<>();
     }
 
-    public void test() throws ParserConfigurationException, IOException, SAXException {
+    public void test() throws IOException, SAXException {
         Document doc = documentBuilder.parse(getClass().getResourceAsStream("xml1.xml"));
         Resource res = new StringResource("/html/body/table/tr");
         XPathQueryExecutor exec = new XPathQueryExecutor(context, doc, res, new XPathExpressionCompiler(), new AbstractConnection.StatementCounter(), true);
@@ -67,7 +67,7 @@ public class XPathQueryExecutorTest extends AbstractTestCase {
         assertEquals(3,callback.getRowsNumber());
     }
 
-    public void test2() throws ParserConfigurationException, IOException, SAXException {
+    public void test2() throws IOException, SAXException {
         Document doc = documentBuilder.parse(getClass().getResourceAsStream("xml2.xml"));
         Resource res = new StringResource("  /xml/element[@attribute=1]  | /xml/element[not(@attribute)]");
         XPathQueryExecutor exec = new XPathQueryExecutor(context, doc, res, new XPathExpressionCompiler(), new AbstractConnection.StatementCounter(), false);

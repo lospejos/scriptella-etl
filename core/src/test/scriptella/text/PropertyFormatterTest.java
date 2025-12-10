@@ -18,8 +18,8 @@ public class PropertyFormatterTest extends TestCase {
     private Map<String, String> formatsMap;
 
     @Override
-    protected void setUp() throws Exception {
-        formatsMap = new HashMap<String, String>();
+    protected void setUp() {
+        formatsMap = new HashMap<>();
         formatsMap.put("nullStrCol.null_string", "nullStr");
         formatsMap.put("numbercol.type", "number");
         formatsMap.put("numbercol.pattern", "00.00");
@@ -119,7 +119,7 @@ public class PropertyFormatterTest extends TestCase {
 
     public void testFormattingCallback() {
         PropertyFormatInfo fi = PropertyFormatInfo.parse(props, "");
-        Map<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
         params.put("numberCol", 1.1);
         ParametersCallback c = new MapParametersCallback(params);
         PropertyFormatter cf = new PropertyFormatter(fi);

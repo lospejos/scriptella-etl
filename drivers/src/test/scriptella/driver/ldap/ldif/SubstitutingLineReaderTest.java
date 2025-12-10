@@ -30,7 +30,7 @@ import java.io.StringReader;
  * @version 1.0
  */
 public class SubstitutingLineReaderTest extends AbstractTestCase {
-    public void test() throws IOException {
+    public void test() {
         ParametersCallback pc = MockParametersCallbacks.SIMPLE;
         String test = "Just a ${test}\n" +
                 "Line2 $var:\n" +

@@ -72,7 +72,7 @@ public class TextConnectionPerfTest extends AbstractTestCase {
      */
     public void testQuery() {
         //Create a configuration with non default values
-        Map<String, String> props = new HashMap<String, String>();
+        Map<String, String> props = new HashMap<>();
         ConnectionParameters cp = new ConnectionParameters(new MockConnectionEl(props, "tst://file"), MockDriverContext.INSTANCE);
 
         TextConnection con = new TextConnection(cp);
@@ -98,11 +98,10 @@ public class TextConnectionPerfTest extends AbstractTestCase {
     /**
      * History:
      * 03.12.2006 - Duron 1.7Mhz - 703 ms
-     * @throws java.io.UnsupportedEncodingException
      */
-    public void testScript() throws UnsupportedEncodingException {
+    public void testScript() {
         //Create a configuration with non default values
-        Map<String, String> props = new HashMap<String, String>();
+        Map<String, String> props = new HashMap<>();
         ConnectionParameters cp = new ConnectionParameters(new MockConnectionEl(props, "tst://file"), MockDriverContext.INSTANCE);
 
         TextConnection con = new TextConnection(cp);

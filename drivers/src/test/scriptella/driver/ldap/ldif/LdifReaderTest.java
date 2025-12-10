@@ -80,7 +80,7 @@ public class LdifReaderTest extends TestCase {
         FIONA_JPEG_FILE = createFile("fiona", data);
     }
 
-    public void testLdifEmpty() throws NamingException {
+    public void testLdifEmpty() {
         String ldif = "";
 
         List entries = new LdifReader(ldif).asList();
@@ -88,7 +88,7 @@ public class LdifReaderTest extends TestCase {
         assertEquals(0, entries.size());
     }
 
-    public void testLdifEmptyLines() throws NamingException {
+    public void testLdifEmptyLines() {
         String ldif = "\n\n\r\r\n";
 
         List entries = new LdifReader(ldif).asList();
@@ -96,7 +96,7 @@ public class LdifReaderTest extends TestCase {
         assertEquals(0, entries.size());
     }
 
-    public void testLdifComments() throws NamingException {
+    public void testLdifComments() {
         String ldif =
                 "#Comment 1\r" +
                         "#\r" +
@@ -109,7 +109,7 @@ public class LdifReaderTest extends TestCase {
         assertEquals(0, entries.size());
     }
 
-    public void testLdifVersion() throws NamingException {
+    public void testLdifVersion() {
         String ldif =
                 "#Comment 1\r" +
                         "#\r" +
@@ -131,9 +131,8 @@ public class LdifReaderTest extends TestCase {
     /**
      * Spaces at the end of values should not be included into values.
      *
-     * @throws NamingException
      */
-    public void testLdifParserEndSpaces() throws NamingException {
+    public void testLdifParserEndSpaces() {
         String ldif =
                 "version:   1\n" +
                         "dn: cn=app1,ou=applications,ou=conf,dc=apache,dc=org\n" +
@@ -161,9 +160,8 @@ public class LdifReaderTest extends TestCase {
     /**
      * Changes and entries should not be mixed
      *
-     * @throws NamingException
      */
-    public void testLdifParserCombinedEntriesChanges() throws NamingException {
+    public void testLdifParserCombinedEntriesChanges() {
         String ldif =
                 "version:   1\n" +
                         "dn: cn=app1,ou=applications,ou=conf,dc=apache,dc=org\n" +
@@ -194,9 +192,8 @@ public class LdifReaderTest extends TestCase {
     /**
      * Changes and entries should not be mixed
      *
-     * @throws NamingException
      */
-    public void testLdifParserCombinedEntriesChanges2() throws NamingException {
+    public void testLdifParserCombinedEntriesChanges2() {
         String ldif =
                 "version:   1\n" +
                         "dn: cn=app1,ou=applications,ou=conf,dc=apache,dc=org\n" +
@@ -226,9 +223,8 @@ public class LdifReaderTest extends TestCase {
     /**
      * Changes and entries should not be mixed
      *
-     * @throws NamingException
      */
-    public void testLdifParserCombinedChangesEntries() throws NamingException {
+    public void testLdifParserCombinedChangesEntries() {
         String ldif =
                 "version:   1\n" +
                         "# Delete an entry. The operation will attach the LDAPv3\n" +
@@ -259,9 +255,8 @@ public class LdifReaderTest extends TestCase {
     /**
      * Changes and entries should not be mixed
      *
-     * @throws NamingException
      */
-    public void testLdifParserCombinedChangesEntries2() throws NamingException {
+    public void testLdifParserCombinedChangesEntries2() {
         String ldif =
                 "version:   1\n" +
                         "# Delete an entry. The operation will attach the LDAPv3\n" +
@@ -488,7 +483,7 @@ public class LdifReaderTest extends TestCase {
         assertNull(attr.get());
     }
 
-    public void testLdifParserRFC2849Sample1() throws NamingException {
+    public void testLdifParserRFC2849Sample1() {
         String ldif =
                 "version: 1\n" +
                         "dn: cn=Barbara Jensen, ou=Product Development, dc=airius, dc=com\n" +
@@ -564,7 +559,7 @@ public class LdifReaderTest extends TestCase {
         assertTrue(attr.contains("+1 408 555 1212"));
     }
 
-    public void testLdifParserRFC2849Sample2() throws NamingException {
+    public void testLdifParserRFC2849Sample2() {
         String ldif =
                 "version: 1\n" +
                         "dn: cn=Barbara Jensen, ou=Product Development, dc=airius, dc=com\n" +
@@ -619,7 +614,7 @@ public class LdifReaderTest extends TestCase {
 
     }
 
-    public void testLdifParserRFC2849Sample3() throws NamingException, Exception {
+    public void testLdifParserRFC2849Sample3() throws Exception {
         String ldif =
                 "version: 1\n" +
                         "dn: cn=Gern Jensen, ou=Product Testing, dc=airius, dc=com\n" +
@@ -670,7 +665,7 @@ public class LdifReaderTest extends TestCase {
                         .getBytes("UTF-8")));
     }
 
-    public void testLdifParserRFC2849Sample3VariousSpacing() throws NamingException, Exception {
+    public void testLdifParserRFC2849Sample3VariousSpacing() throws Exception {
         String ldif =
                 "version:1\n" +
                         "dn:cn=Gern Jensen, ou=Product Testing, dc=airius, dc=com  \n" +
@@ -721,7 +716,7 @@ public class LdifReaderTest extends TestCase {
                         .getBytes("UTF-8")));
     }
 
-    public void testLdifParserRFC2849Sample4() throws NamingException, Exception {
+    public void testLdifParserRFC2849Sample4() throws Exception {
         String ldif =
                 "version: 1\n" +
                         "dn:: b3U95Za25qWt6YOoLG89QWlyaXVz\n" +
@@ -897,7 +892,7 @@ public class LdifReaderTest extends TestCase {
         }
     }
 
-    public void testLdifParserRFC2849Sample5WithSizeLimit() throws NamingException, Exception {
+    public void testLdifParserRFC2849Sample5WithSizeLimit() {
         String ldif =
                 "version: 1\n" +
                         "dn: cn=Horatio Jensen, ou=Product Testing, dc=airius, dc=com\n" +
@@ -1138,7 +1133,7 @@ public class LdifReaderTest extends TestCase {
         assertEquals(values[5][2][0], item.getAttribute().getID());
     }
 
-    public void testLdifParserRFC2849Sample7() throws NamingException, Exception {
+    public void testLdifParserRFC2849Sample7() {
         String ldif =
                 "version: 1\n" +
                         "# Delete an entry. The operation will attach the LDAPv3\n" +
@@ -1163,7 +1158,7 @@ public class LdifReaderTest extends TestCase {
         assertTrue(control.isCritical());
     }
 
-    public void testLdifParserRFC2849Sample7NoValueNoCritical() throws NamingException, Exception {
+    public void testLdifParserRFC2849Sample7NoValueNoCritical() {
         String ldif =
                 "version: 1\n" +
                         "# Delete an entry. The operation will attach the LDAPv3\n" +
@@ -1188,7 +1183,7 @@ public class LdifReaderTest extends TestCase {
         assertFalse(control.isCritical());
     }
 
-    public void testLdifParserRFC2849Sample7NoCritical() throws NamingException, Exception {
+    public void testLdifParserRFC2849Sample7NoCritical() {
         String ldif =
                 "version: 1\n" +
                         "# Delete an entry. The operation will attach the LDAPv3\n" +
@@ -1214,7 +1209,7 @@ public class LdifReaderTest extends TestCase {
         assertEquals("control-value", new String(control.getEncodedValue()));
     }
 
-    public void testLdifParserRFC2849Sample7NoOid() throws NamingException, Exception {
+    public void testLdifParserRFC2849Sample7NoOid() {
         String ldif =
                 "version: 1\n" +
                         "# Delete an entry. The operation will attach the LDAPv3\n" +
@@ -1234,7 +1229,7 @@ public class LdifReaderTest extends TestCase {
         }
     }
 
-    public void testLdifParserRFC2849Sample7BadOid() throws NamingException, Exception {
+    public void testLdifParserRFC2849Sample7BadOid() {
         String ldif =
                 "version: 1\n" +
                         "# Delete an entry. The operation will attach the LDAPv3\n" +
@@ -1254,7 +1249,7 @@ public class LdifReaderTest extends TestCase {
         }
     }
 
-    public void testLdifParserChangeModifyMultiAttrs() throws NamingException, Exception {
+    public void testLdifParserChangeModifyMultiAttrs() {
         String ldif =
                 "version: 1\n" +
                         "dn: ou=Product Development, dc=airius, dc=com\n" +

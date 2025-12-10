@@ -4,11 +4,13 @@
         n=10
     </properties>
     <connection driver="script">
-        language=JavaScript
+        language=groovy
     </connection>
     <!-- test #1 - iterate through numbers from 0 to 9 and notify callback -->
     <query if="testNr==1"><![CDATA[
-        for (var i=0;i<n;i++) {
+        k=0;
+        nn=n as int;
+        for (var i=0;i<nn;i++) {
             k=i;
             query.next();
         }]]>
@@ -28,8 +30,9 @@
             query.next();
             <script>
                 //Special check to avoid Rhino ReferenceError: "i" is not defined.
-                i = (typeof i == 'undefined')? null : i;
-
+                // i = (typeof i == 'undefined')? null : i;
+                i = null
+                // var i = binding.getProperty("i") ?: 0
                 callback.notify(i);
             </script>
         </query>

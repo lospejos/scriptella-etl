@@ -9,7 +9,7 @@ import java.util.Date;
  * @author Fyodor Kupolov
  */
 public class TimestampValueFormatTest extends TestCase {
-    public void testFormat() throws Exception {
+    public void testFormat() {
         String dateStr = "2012-5-25 01:02:03";
         String expectedStr = "2012-05-25 01:02:03.0";
         Date date = Timestamp.valueOf(dateStr);

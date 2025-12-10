@@ -48,12 +48,12 @@ public class ConditionsTest extends DBTestCase {
             ps = con.prepareStatement("select * from Test");
             rs = ps.executeQuery();
 
-            Set<Integer> expected = new HashSet<Integer>();
+            Set<Integer> expected = new HashSet<>();
             expected.add(1);
             expected.add(3);
             expected.add(4);
 
-            List<Integer> actual = new ArrayList<Integer>();
+            List<Integer> actual = new ArrayList<>();
 
             //resultset must contains only 1,3 and 4
             while (rs.next()) {

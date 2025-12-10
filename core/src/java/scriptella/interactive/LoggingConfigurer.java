@@ -15,8 +15,10 @@
  */
 package scriptella.interactive;
 
-import java.util.logging.Handler;
-import java.util.logging.Logger;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+
+import org.slf4j.LoggerFactory;
 
 /**
  * Scriptella runtime configurer for java.util.Logging.
@@ -25,6 +27,9 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 public class LoggingConfigurer {
+
+    private static final Level original = getScriptellaLogger().getLevel();
+
     private LoggingConfigurer() {
     }
 
@@ -32,19 +37,17 @@ public class LoggingConfigurer {
      * Configures logging messages to use specified handler
      * @param handler to use.
      */
-    public static void configure(Handler handler) {
-        final Logger l = getScriptellaLogger();
-        l.setLevel(handler.getLevel());
-        l.setUseParentHandlers(false);
-        l.addHandler(handler);
+    public static void configure(Logger handler) {
+        final Logger logger = getScriptellaLogger();
+        logger.setLevel(handler.getLevel());
     }
 
-    public static void remove(Handler handler) {
-        getScriptellaLogger().removeHandler(handler);
+    public static void reset() {
+        getScriptellaLogger().setLevel(original);
     }
 
-    private static Logger getScriptellaLogger() {
-        return Logger.getLogger("scriptella");
+    public static Logger getScriptellaLogger() {
+        return (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
     }
 
 

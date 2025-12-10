@@ -143,7 +143,7 @@ public class ExecutionStatisticsTest extends DBTestCase {
     /**
      * Tests if total time is correctly printed.
      */
-    public void testTotalTime() throws EtlExecutorException {
+    public void testTotalTime() {
         DecimalFormat f = new DecimalFormat(ExecutionStatistics.DOUBLE_FORMAT_PTR);
         char sep = f.getDecimalFormatSymbols().getDecimalSeparator();
 

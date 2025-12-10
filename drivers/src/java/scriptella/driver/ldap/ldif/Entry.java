@@ -33,10 +33,10 @@ import java.util.Map;
 
 /**
  * A entry to be populated by an ldif parser.
- * 
+ *
  * We will have different kind of entries : - added entries - deleted entries -
  * modified entries - RDN modified entries - DN modified entries
- * 
+ *
  * @author <a href="mailto:dev@directory.apache.org">Apache Directory Project</a>
  */
 public class Entry
@@ -45,9 +45,9 @@ public class Entry
     private int changeType=ADD;
 
     /** the modification item list */
-    private List<ModificationItem> modificationList = new ArrayList<ModificationItem>();
+    private List<ModificationItem> modificationList = new ArrayList<>();
 
-    private Map<String,ModificationItem> modificationItems = new HashMap<String, ModificationItem>();
+    private Map<String,ModificationItem> modificationItems = new HashMap<>();
 
     /** the dn of the ldif entry */
     private String dn;
@@ -81,7 +81,7 @@ public class Entry
 
     /**
      * Set the Distinguished Name
-     * 
+     *
      * @param dn
      *            The Distinguished Name
      */
@@ -92,10 +92,10 @@ public class Entry
 
     /**
      * Set the modification type
-     * 
+     *
      * @param changeType
      *            The change type
-     * 
+     *
      */
     public void setChangeType( int changeType )
     {
@@ -104,7 +104,7 @@ public class Entry
 
     /**
      * Set the change type
-     * 
+     *
      * @param changeType
      *            The change type
      */
@@ -136,11 +136,11 @@ public class Entry
 
     /**
      * Add a modification item
-     * 
+     *
      * @param modOp
      *            The operation. One of : DirContext.ADD_ATTRIBUTE
      *            DirContext.REMOVE_ATTRIBUTE DirContext.REPLACE_ATTRIBUTE
-     * 
+     *
      * @param id
      *            The attribute's ID
      * @param value
@@ -158,7 +158,7 @@ public class Entry
 
                 if ( item.getModificationOp() != modOp )
                 {
-                    // This is an error : we can't have two different 
+                    // This is an error : we can't have two different
                     // modifications of the same attribute for the same entry
 
                     throw new LdifParseException( "Bad modification" );
@@ -179,7 +179,7 @@ public class Entry
 
     /**
      * Add an attribute to the entry
-     * 
+     *
      * @param attr
      *            The attribute to be added
      */
@@ -190,13 +190,13 @@ public class Entry
 
     /**
      * Add an attribute to the entry
-     * 
+     *
      * @param id
      *            The attribute ID
-     * 
+     *
      * @param value
      *            The attribute value
-     * 
+     *
      */
     public void addAttribute( String id, Object value )
     {
@@ -214,13 +214,13 @@ public class Entry
 
     /**
      * Add an attribute value to an existing attribute
-     * 
+     *
      * @param id
      *            The attribute ID
-     * 
+     *
      * @param value
      *            The attribute value
-     * 
+     *
      */
     public void putAttribute( String id, Object value )
     {
@@ -238,7 +238,7 @@ public class Entry
 
     /**
      * Get the change type
-     * 
+     *
      * @return The change type. One of : ADD = 0; MODIFY = 1; MODDN = 2; MODRDN =
      *         3; DELETE = 4;
      */
@@ -273,7 +273,7 @@ public class Entry
 
     /**
      * Returns a attribute given it's id
-     * 
+     *
      * @param attributeId
      *            The attribute Id
      * @return The attribute if it exists
@@ -290,7 +290,7 @@ public class Entry
 
     /**
      * Get the entry's attributes
-     * 
+     *
      * @return An Attributes
      */
     public Attributes getAttributes()
@@ -315,7 +315,7 @@ public class Entry
 
     /**
      * Set the flage deleteOldRdn
-     * 
+     *
      * @param deleteOldRdn
      *            True if the old RDN should be deleted
      */
@@ -334,7 +334,7 @@ public class Entry
 
     /**
      * Set the new RDN
-     * 
+     *
      * @param newRdn
      *            The new RDN
      */
@@ -353,7 +353,7 @@ public class Entry
 
     /**
      * Set the new superior
-     * 
+     *
      * @param newSuperior
      *            The new Superior
      */
@@ -417,7 +417,7 @@ public class Entry
 
     /**
      * Add a control to the entry
-     * 
+     *
      * @param control
      *            The control
      */

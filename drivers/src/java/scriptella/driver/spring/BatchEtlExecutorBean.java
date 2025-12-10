@@ -15,15 +15,15 @@
  */
 package scriptella.driver.spring;
 
+import scriptella.interactive.ProgressIndicator;
+
+import java.util.Map;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
-import scriptella.interactive.ProgressIndicator;
-
-import java.io.IOException;
-import java.util.Map;
 
 /**
  * Batched implementation to run {@link scriptella.execution.EtlExecutor ETL executors} for Spring IoC container.
@@ -82,9 +82,8 @@ public class BatchEtlExecutorBean implements Runnable, InitializingBean, BeanFac
      * Sets configuration locations.
      *
      * @param resources configuration resources.
-     * @throws java.io.IOException if I/O error occurs
      */
-    public void setConfigLocations(Resource[] resources) throws IOException {
+    public void setConfigLocations(Resource[] resources) {
         configLocations = resources;
     }
 

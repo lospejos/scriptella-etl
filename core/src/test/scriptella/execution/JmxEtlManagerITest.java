@@ -33,7 +33,7 @@ import java.util.Set;
  * @version 1.0
  */
 public class JmxEtlManagerITest extends AbstractTestCase {
-    public void test() throws EtlExecutorException, MalformedObjectNameException {
+    public void test() throws EtlExecutorException {
         final EtlExecutor e = newEtlExecutor();
         e.setJmxEnabled(true);
 

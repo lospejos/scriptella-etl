@@ -29,10 +29,11 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class executes a regex query over a text file content.
@@ -72,7 +73,7 @@ import java.util.regex.Pattern;
  * @version 1.0
  */
 class TextQueryExecutor implements ParametersCallback {
-    private static final Logger LOG = Logger.getLogger(TextQueryExecutor.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(TextQueryExecutor.class.getName());
     private static final String COLUMN_PREFIX = "column";
 
     private final PropertiesSubstitutor ps;
@@ -87,7 +88,7 @@ class TextQueryExecutor implements ParametersCallback {
         //Compiles patterns loaded from specified reader.
         //Patterns are read line-by-line.
         BufferedReader r = IOUtils.asBuffered(queryReader);
-        List<Pattern> result = new ArrayList<Pattern>();
+        List<Pattern> result = new ArrayList<>();
         try {
             for (String s; (s = r.readLine()) != null;) {
                 s = s.trim();
@@ -106,7 +107,7 @@ class TextQueryExecutor implements ParametersCallback {
             IOUtils.closeSilently(r);
         }
         if (result.isEmpty()) {
-            LOG.fine("Empty query matches all lines");
+            LOG.info("Empty query matches all lines");
             result.add(Pattern.compile(".*"));
         }
         query = result.toArray(new Pattern[result.size()]);
@@ -138,7 +139,7 @@ class TextQueryExecutor implements ParametersCallback {
                     m.reset(line);
                 }
                 if (m.find()) {
-                    if (LOG.isLoggable(Level.FINE)) {
+                    if (LOG.isTraceEnabled()) {
                         LOG.info("Pattern matched: " + m);
                     }
                     result = m;

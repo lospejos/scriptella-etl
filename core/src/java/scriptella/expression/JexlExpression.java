@@ -65,7 +65,7 @@ public final class JexlExpression extends Expression {
      */
     public static JexlEngine newJexlEngine() {
         JexlEngine je = new JexlEngine();
-        Map<String, Object> fMap = new HashMap<String, Object>();
+        Map<String, Object> fMap = new HashMap<>();
         EtlVariable etl = new EtlVariable();
         fMap.put("date", etl.getDate());
         fMap.put("text", etl.getText());

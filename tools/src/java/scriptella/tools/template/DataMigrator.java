@@ -36,8 +36,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Data migration template manager.
@@ -68,8 +69,8 @@ public class DataMigrator extends TemplateManager {
     private static final String DATA_MIGRATOR_ETL_XML = "dataMigrator.etl.xml";
     private static final String DATA_MIGRATOR_ETL_PROPERTIES = "dataMigrator.etl.properties";
     private static final String DATA_MIGRATOR_BLOCK_ETL_XML = "dataMigratorBlock.etl.xml";
-    private static Logger LOG = Logger.getLogger(DataMigrator.class.getName());
-    static boolean DEBUG = LOG.isLoggable(Level.FINE);
+    private static Logger LOG = LoggerFactory.getLogger(DataMigrator.class.getName());
+    static boolean DEBUG = LOG.isDebugEnabled();
 
 
     public void create(Map<String, ?> properties) throws IOException {
@@ -82,7 +83,7 @@ public class DataMigrator extends TemplateManager {
         DbSchema schema = DbSchema.initialize(properties);
         final Set<String> tables = sortTables(schema);
         StringBuilder queriesXml = new StringBuilder(block.length() * tables.size());
-        final Map<String, String> params = new HashMap<String, String>();
+        final Map<String, String> params = new HashMap<>();
         final PropertiesSubstitutor ps = new PropertiesSubstitutor(params);
         StringBuilder tmp = new StringBuilder();
         for (String table : tables) {
@@ -131,7 +132,7 @@ public class DataMigrator extends TemplateManager {
 
     private static Set<String> sortTables(final DbSchema schema) {
         List<String> tables = schema.getTables();
-        LOG.fine("Sorting " + tables);
+        LOG.info("Sorting " + tables);
 
         int n = tables.size();
 
@@ -154,13 +155,13 @@ public class DataMigrator extends TemplateManager {
                 }
             }
             if (DEBUG) {
-                LOG.fine("Tables dependencies matrix: \n" + msg);
+                LOG.debug("Tables dependencies matrix: \n" + msg);
             }
 
             boolean free[] = new boolean[n];
             Arrays.fill(free, true);
 
-            Set<String> res = new LinkedHashSet<String>();
+            Set<String> res = new LinkedHashSet<>();
 
             for (int i = 0; i < n; i++) {
                 //on each i iteration we choose the best candidate (having minimum number of incoming relationships)
@@ -281,7 +282,7 @@ public class DataMigrator extends TemplateManager {
 
         Set<String> getTableColumns(final String tableName) {
             try {
-                return new HashSet<String>(
+                return new HashSet<>(
                         getColumn(getMetaData().getColumns(catalog, schema, tableName, null), 4));
             } catch (SQLException e) {
                 throw new JdbcException(e.getMessage(), e);
@@ -297,7 +298,7 @@ public class DataMigrator extends TemplateManager {
          * @return list of column values.
          */
         static List<String> getColumn(final ResultSet rs, final int columnPos) {
-            List<String> l = new ArrayList<String>();
+            List<String> l = new ArrayList<>();
             try {
                 while (rs.next()) {
                     l.add(rs.getString(columnPos));

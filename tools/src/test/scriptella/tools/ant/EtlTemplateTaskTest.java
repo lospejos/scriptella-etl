@@ -36,14 +36,14 @@ public class EtlTemplateTaskTest extends AbstractTestCase {
     public void test() {
         EtlTemplateTask t = new EtlTemplateTask() {
             @Override//Verify that data migrator template is used
-            protected void create(TemplateManager tm, Map<String, ?> properties) throws IOException {
+            protected void create(TemplateManager tm, Map<String, ?> properties) {
                 assertTrue(tm instanceof DataMigrator);
                 props = properties;
             }
 
             @Override//Return mock properties to isolate from Ant
             protected Map<String, ?> getProperties() {
-                Map<String, Object> m = new HashMap<String, Object>();
+                Map<String, Object> m = new HashMap<>();
                 m.put("a", "AA");
                 m.put("b", "BB");
                 return m;

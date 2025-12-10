@@ -15,13 +15,14 @@
  */
 package scriptella.tools.ant;
 
-import org.apache.tools.ant.Task;
+import ch.qos.logback.classic.Level;
 import scriptella.interactive.LoggingConfigurer;
 import scriptella.util.CollectionUtils;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
+
+import org.apache.tools.ant.Task;
 
 /**
  * Base class for Scriptella ETL Ant tasks.
@@ -30,10 +31,11 @@ import java.util.logging.Level;
  * @version 1.0
  */
 public class EtlTaskBase extends Task {
+
     private boolean inheritAll = true;
     private boolean debug;
     private boolean quiet;
-    private AntHandler handler; //Optional Ant handler used for logging
+    // private AntHandler handler; //Optional Ant handler used for logging
 
     /**
      * Setter for inheritAll property.
@@ -43,7 +45,6 @@ public class EtlTaskBase extends Task {
     public void setInheritAll(boolean inheritAll) {
         this.inheritAll = inheritAll;
     }
-
 
     /**
      * Getter for inheritAll property.
@@ -70,7 +71,6 @@ public class EtlTaskBase extends Task {
         this.quiet = quiet;
     }
 
-
     /**
      * Returns a map of properties to pass into Scriptella.
      * <p>If {@link #isInheritAll() inheritAll} property is true (the default),
@@ -80,7 +80,7 @@ public class EtlTaskBase extends Task {
      */
     @SuppressWarnings("unchecked")
     protected Map<String, ?> getProperties() {
-        Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap<>();
         if (inheritAll) { //inherit ant properties - not supported in forked mode yet
             result.putAll(getProject().getProperties());
         } else {
@@ -93,28 +93,21 @@ public class EtlTaskBase extends Task {
      * Configures Scriptella JUL loggers to use Ant logging.
      */
     protected void setupLogging() {
-        if (handler != null) {
-            resetLogging();
-        }
-        handler = new AntHandler(getProject(), debug);
-        handler.setLevel(Level.INFO);
+        var logger = LoggingConfigurer.getScriptellaLogger();
+        logger.setLevel(Level.INFO);
         if (debug) {
-            handler.setLevel(Level.FINE);
+            logger.setLevel(Level.DEBUG);
         }
         if (quiet) {
-            handler.setLevel(Level.WARNING);
+            logger.setLevel(Level.WARN);
         }
-        LoggingConfigurer.configure(handler);
     }
 
     /**
      * Resets JUL back to the original state.
      */
     protected void resetLogging() {
-        if (handler != null) {
-            LoggingConfigurer.remove(handler);
-        }
+        LoggingConfigurer.reset();
     }
-
 
 }

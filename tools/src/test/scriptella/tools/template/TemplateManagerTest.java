@@ -32,7 +32,7 @@ import java.util.Map;
 public class TemplateManagerTest extends AbstractTestCase {
 
     public void test() throws IOException {
-        final Map<String,Writer> files = new HashMap<String, Writer>();
+        final Map<String,Writer> files = new HashMap<>();
         TemplateManager tm = new TemplateManager() {
             protected Writer newFileWriter(String fileName) {
                 files.put(fileName, new StringWriter());
@@ -73,7 +73,7 @@ public class TemplateManagerTest extends AbstractTestCase {
         public static boolean created;
 
         @Override
-        public void create(Map<String, ?> properties) throws IOException {
+        public void create(Map<String, ?> properties) {
             created=true;
         }
     }

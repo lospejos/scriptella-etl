@@ -25,7 +25,7 @@ import scriptella.execution.EtlExecutorException;
  * @version 1.0
  */
 public class ValidationTest extends AbstractTestCase {
-    public void testConnectionId() throws EtlExecutorException {
+    public void testConnectionId() {
         try {
             newEtlExecutor();
             fail("No connection id validation error expected");

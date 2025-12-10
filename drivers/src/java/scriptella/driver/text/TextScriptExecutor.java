@@ -97,7 +97,7 @@ public class TextScriptExecutor implements Closeable, Flushable {
                 if (trimLines) {
                     line = line.trim();
                 }
-                //If trimming is disabled (keeping format) or if line is not empty 
+                //If trimming is disabled (keeping format) or if line is not empty
                 if (!trimLines || line.length() > 0) {
                     try {
                         out.write(ps.substitute(line));
@@ -118,7 +118,7 @@ public class TextScriptExecutor implements Closeable, Flushable {
         out.flush();
     }
 
-    public void close() throws IOException {
+    public void close() {
         IOUtils.closeSilently(out);
         out = null;
         ps = null;

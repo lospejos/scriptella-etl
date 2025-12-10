@@ -52,7 +52,7 @@ public class TextQueryExecutorTest extends AbstractTestCase {
                 }
             }
         }), new TextConnectionParameters());
-        final Set<String> expected = new HashSet<String>();
+        final Set<String> expected = new HashSet<>();
         expected.add("msg1");
         expected.add("msg3");
         AbstractConnection.StatementCounter cnt = new AbstractConnection.StatementCounter();
@@ -72,7 +72,7 @@ public class TextQueryExecutorTest extends AbstractTestCase {
         cp.setTrimLines(false);
         TextQueryExecutor tq = new TextQueryExecutor(new StringReader(""),
                 new PropertiesSubstitutor(MockParametersCallbacks.UNSUPPORTED), cp);
-        final Set<String> expected = new HashSet<String>();
+        final Set<String> expected = new HashSet<>();
         expected.add("line1");
         expected.add("line2");
         AbstractConnection.StatementCounter cnt = new AbstractConnection.StatementCounter();
@@ -95,7 +95,7 @@ public class TextQueryExecutorTest extends AbstractTestCase {
         cp.setTrimLines(false);
         TextQueryExecutor tq = new TextQueryExecutor(new StringReader("line2\nline4"),
                 new PropertiesSubstitutor(MockParametersCallbacks.UNSUPPORTED), cp);
-        final Set<String> expected = new HashSet<String>();
+        final Set<String> expected = new HashSet<>();
         expected.add("line2");
         expected.add("line4");
         AbstractConnection.StatementCounter cnt = new AbstractConnection.StatementCounter();
@@ -121,7 +121,7 @@ public class TextQueryExecutorTest extends AbstractTestCase {
         TextConnectionParameters cp = new TextConnectionParameters();
         TextQueryExecutor tq = new TextQueryExecutor(new StringReader(".*(match).*"),
                 new PropertiesSubstitutor(MockParametersCallbacks.SIMPLE), cp);
-        final Set<String> expected = new HashSet<String>();
+        final Set<String> expected = new HashSet<>();
         expected.add("match");
         AbstractConnection.StatementCounter cnt = new AbstractConnection.StatementCounter();
         tq.execute(in, new QueryCallback() {

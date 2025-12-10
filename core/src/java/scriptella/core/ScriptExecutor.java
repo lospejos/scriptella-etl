@@ -27,8 +27,6 @@ import scriptella.util.ExceptionUtils;
 import scriptella.util.StringUtils;
 
 import java.util.Collections;
-import java.util.logging.Level;
-
 
 /**
  * &lt;script&gt; element executor.
@@ -42,8 +40,8 @@ public final class ScriptExecutor extends ContentExecutor<ScriptEl> {
     }
 
     protected void execute(Connection connection, Resource resource, DynamicContext ctx) {
-        if (debug) {
-            log.fine("Executing script " + getLocation());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Executing script " + getLocation());
         }
         boolean repeat;
         OnErrorHandler onErrorHandler = null;
@@ -51,8 +49,8 @@ public final class ScriptExecutor extends ContentExecutor<ScriptEl> {
             repeat = false;
             try {
                 connection.executeScript(resource, ctx);
-                if (debug) {
-                    log.fine("Script " + getLocation() + " completed");
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Script " + getLocation() + " completed");
                 }
             } catch (Throwable t) {
                 ScriptEl scriptEl = getElement();
@@ -90,8 +88,8 @@ public final class ScriptExecutor extends ContentExecutor<ScriptEl> {
             DialectIdentifier dialectId = con.getDialectIdentifier();
 
             ContentEl content = prepareContent(onErrorEl.getContent(dialectId));
-            if (log.isLoggable(Level.INFO)) {
-                log.log(Level.INFO, StringUtils.consoleFormat("Script " + getLocation() + " failed: " + t +
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(StringUtils.consoleFormat("Script " + getLocation() + " failed: " + t +
                         "\nUsing onError handler: " + onErrorEl));
             }
             try {

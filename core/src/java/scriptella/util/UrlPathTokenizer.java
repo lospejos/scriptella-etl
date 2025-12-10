@@ -57,7 +57,7 @@ public class UrlPathTokenizer {
             throw new IllegalArgumentException("urls cannot be null");
         }
         String[] strings = SEPARATOR.split(urls);
-        List<URL> res = new ArrayList<URL>(strings.length);
+        List<URL> res = new ArrayList<>(strings.length);
         for (String s : strings) {
             String u = s.trim();
             if (u.length() > 0) {

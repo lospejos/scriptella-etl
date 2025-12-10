@@ -20,7 +20,6 @@ import scriptella.execution.EtlExecutor;
 import scriptella.execution.EtlExecutorException;
 import scriptella.spi.MockConnectionParameters;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -38,7 +37,7 @@ public class ShellDriverITest extends AbstractTestCase {
     private ByteArrayOutputStream o1;
     private ByteArrayOutputStream o2;
 
-    protected void setUp() throws Exception {
+    protected void setUp() {
 
         testURLHandler = new TestURLHandler() {
             public InputStream getInputStream(final URL u) {
@@ -59,7 +58,7 @@ public class ShellDriverITest extends AbstractTestCase {
         };
     }
 
-    public void test() throws EtlExecutorException, UnsupportedEncodingException {
+    public void test() throws EtlExecutorException {
         EtlExecutor e = newEtlExecutor();
         e.execute();
         assertNotNull(o1);

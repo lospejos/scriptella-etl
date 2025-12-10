@@ -35,7 +35,7 @@ import java.util.List;
  */
 public final class SqlReaderTokenizer implements SqlTokenizer {
     private final ReaderWrapper reader;
-    private final List<Integer> injections = new ArrayList<Integer>();
+    private final List<Integer> injections = new ArrayList<>();
     private final StringBuilder sb = new StringBuilder(80);
     private char[] separator = DEFAULT_SEPARATOR;
     private boolean separatorOnSingleLine;
@@ -256,7 +256,7 @@ public final class SqlReaderTokenizer implements SqlTokenizer {
     public void setSeparatorOnSingleLine(boolean separatorOnSingleLine) {
         this.separatorOnSingleLine = separatorOnSingleLine;
     }
-    
+
     /**
      * Returns true if preserve comments and whitespaces. Default value is <b><code>false</code></b>
      * @return <tt>false</tt> by default

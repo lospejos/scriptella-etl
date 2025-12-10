@@ -31,8 +31,9 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.IdentityHashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents a JDBC connection.
@@ -57,7 +58,7 @@ public class JdbcConnection extends AbstractConnection implements NativeConnecti
     public static final String TRANSACTION_ISOLATION_REPEATABLE_READ = "REPEATABLE_READ";
     public static final String TRANSACTION_ISOLATION_SERIALIZABLE = "SERIALIZABLE";
     private Connection con;
-    private static final Logger LOG = Logger.getLogger(JdbcConnection.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(JdbcConnection.class.getName());
     private boolean transactable;
     private boolean autocommit;
     private ParametersParser parametersParser;
@@ -71,7 +72,7 @@ public class JdbcConnection extends AbstractConnection implements NativeConnecti
     protected int autocommitSize;
 
     private Integer txIsolation;
-    private final Map<Resource, SqlExecutor> resourcesMap = new IdentityHashMap<Resource, SqlExecutor>();
+    private final Map<Resource, SqlExecutor> resourcesMap = new IdentityHashMap<>();
 
     public JdbcConnection(Connection con, ConnectionParameters parameters) {
         super(parameters);
@@ -92,7 +93,7 @@ public class JdbcConnection extends AbstractConnection implements NativeConnecti
             //Several drivers return -1 which is illegal, but means no TX
             transactable = con.getTransactionIsolation() > Connection.TRANSACTION_NONE;
         } catch (SQLException e) {
-            LOG.log(Level.WARNING, "Unable to determine transaction isolation level for connection " + toString(), e);
+            LOG.error("Unable to determine transaction isolation level for connection " + toString(), e);
         }
         if (transactable) { //only effective for transactable connections
             try {
@@ -174,7 +175,7 @@ public class JdbcConnection extends AbstractConnection implements NativeConnecti
             statusMsg.append("Flushing before query execution is enabled.");
         }
 
-        LOG.fine(statusMsg.toString());
+        LOG.debug(statusMsg.toString());
 
 
         parametersParser = new ParametersParser(parameters.getContext());
@@ -200,7 +201,7 @@ public class JdbcConnection extends AbstractConnection implements NativeConnecti
             }
         } catch (Exception e) {
             setDialectIdentifier(DialectIdentifier.NULL_DIALECT);
-            LOG.log(Level.WARNING, "Failed to obtain meta data for connection. No dialect checking for " + con, e);
+            LOG.error("Failed to obtain meta data for connection. No dialect checking for " + con, e);
         }
     }
 
@@ -247,7 +248,7 @@ public class JdbcConnection extends AbstractConnection implements NativeConnecti
         flush();
 
         if (!transactable) {
-            LOG.log(Level.INFO, "Connection " + toString() + " doesn't support transactions. Commit ignored.");
+            LOG.info("Connection " + toString() + " doesn't support transactions. Commit ignored.");
         } else {
             try {
                 con.commit();
@@ -262,7 +263,7 @@ public class JdbcConnection extends AbstractConnection implements NativeConnecti
             throw new IllegalStateException("Attempt to roll back a transaction on a closed connection");
         }
         if (!transactable) {
-            LOG.log(Level.INFO, "Connection " + toString() + " doesn't support transactions. Rollback ignored.");
+            LOG.info("Connection " + toString() + " doesn't support transactions. Rollback ignored.");
         } else {
             try {
                 con.rollback();

@@ -39,7 +39,7 @@ public class PropertiesMapTest extends AbstractTestCase {
         assertEquals("1", pm.get("p"));
     }
 
-    public void testPut() throws IOException {
+    public void testPut() {
         PropertiesMap pm = new PropertiesMap();
         pm.put("p2", "2");
         pm.put("p2", "");

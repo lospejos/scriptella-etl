@@ -38,7 +38,7 @@ public class LazyInitConnectionTest extends AbstractTestCase {
 
     public void test() throws EtlExecutorException {
         //script should execute normally because of lazy init
-        props=new HashMap<String, String>();
+        props= new HashMap<>();
         props.put("lazy", "true");
         EtlExecutor exec = newEtlExecutor();
         exec.execute();

@@ -41,7 +41,7 @@ import java.net.URLStreamHandlerFactory;
  * @version 1.0
  */
 public abstract class AbstractTestCase extends TestCase {
-    protected static TestURLHandler testURLHandler;
+    protected static TestURLHandler testURLHandler = null;
     protected static final File resourceBaseDir;
 
     static {
@@ -52,7 +52,7 @@ public abstract class AbstractTestCase extends TestCase {
             projectBaseDir = "core";
         }
         resourceBaseDir = new File(projectBaseDir, "src/test");
-        
+
         //Registering tst URL, subclasses should set testUrlStreamHandler in test method if they use "tst" url
         URL.setURLStreamHandlerFactory(new URLStreamHandlerFactory() {
             public URLStreamHandler createURLStreamHandler(final String protocol) {
@@ -78,7 +78,6 @@ public abstract class AbstractTestCase extends TestCase {
                         }
                     };
                 }
-
                 return null;
             }
         });
@@ -86,9 +85,7 @@ public abstract class AbstractTestCase extends TestCase {
 
     public AbstractTestCase() {
         setName(getClass().getSimpleName());
-        testURLHandler=null;
     }
-
 
     /**
      * This method returns file with path relative to project's src/test directory
@@ -105,7 +102,7 @@ public abstract class AbstractTestCase extends TestCase {
     }
 
     protected EtlExecutor newEtlExecutor() {
-        String name = getClass().getSimpleName()+".xml";
+        String name = getClass().getSimpleName() + ".xml";
         return newEtlExecutor(name);
     }
 
@@ -147,17 +144,19 @@ public abstract class AbstractTestCase extends TestCase {
         return s.replaceAll("\\s+", " ").trim();
     }
 
-    protected static interface TestURLHandler {
-        public InputStream getInputStream(final URL u)
-                throws IOException;
-        public OutputStream getOutputStream(final URL u)
-                throws IOException;
+    protected interface TestURLHandler {
 
-        public int getContentLength(final URL u);
+        InputStream getInputStream(final URL u);
+
+        OutputStream getOutputStream(final URL u);
+
+        int getContentLength(final URL u);
+
     }
 
     /**
      * Converts a specified resource to String.
+     *
      * @param content content to convert.
      * @return resource content as String.
      */

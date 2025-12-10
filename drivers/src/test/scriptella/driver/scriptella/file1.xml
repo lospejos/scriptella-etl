@@ -6,11 +6,10 @@
         localProp=visible
     </properties>
     <connection driver="script">
-        language=rhino
+        language=groovy
     </connection>
     <script>
-        with(JavaImporter(Packages.scriptella.driver.scriptella)) {
-            ScriptellaDriverITest.global+=f1+'_'+localProp+'\n';
-        }
+        import scriptella.driver.scriptella.ScriptellaDriverTest;
+        ScriptellaDriverTest.global += f1 + '_' + localProp + '\n';
     </script>
 </etl>

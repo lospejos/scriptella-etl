@@ -21,8 +21,10 @@ import scriptella.spi.Resource;
 import scriptella.util.IOUtils;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * CRQ-12257.
@@ -33,8 +35,8 @@ import java.util.regex.Pattern;
  * @see scriptella.driver.script.ParametersCallbackMap#isNextCalled()
  */
 public class MissingQueryNextCallDetector {
-    private static boolean DISABLE_CHECKER = Boolean.getBoolean("scriptella.disable_missing_query_next_check");
-    private static final Logger LOG = Logger.getLogger(MissingQueryNextCallDetector.class.getName());
+    private static final boolean DISABLE_CHECKER = Boolean.getBoolean("scriptella.disable_missing_query_next_check");
+    private static final Logger LOG = LoggerFactory.getLogger(MissingQueryNextCallDetector.class.getName());
     private static final Pattern QUERY_NEXT_CALL = Pattern.compile("query.*next", Pattern.DOTALL | Pattern.MULTILINE);
     private final ParametersCallbackMap map;
     private final Resource resource;
@@ -60,7 +62,7 @@ public class MissingQueryNextCallDetector {
             try {
                 final String code = IOUtils.toString(resource.open());
                 if (!QUERY_NEXT_CALL.matcher(code).find()) {
-                    LOG.warning("query.next() was never called in query " + resource + ". Nested elements will not be executed. See querying example at http://goo.gl/LrOZS");
+                    LOG.warn("query.next() was never called in query " + resource + ". Nested elements will not be executed. See querying example at http://goo.gl/LrOZS");
                     return true;
                 }
             } catch (IOException e) {

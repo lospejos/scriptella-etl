@@ -16,7 +16,6 @@
 package scriptella.tools.launcher;
 
 import scriptella.DBTestCase;
-import scriptella.execution.EtlExecutorException;
 import scriptella.tools.template.TemplateManagerTest;
 import scriptella.util.IOUtils;
 
@@ -33,6 +32,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Tests for {@link EtlLauncher}.
  *
@@ -41,13 +43,15 @@ import java.util.concurrent.Callable;
  */
 public class EtlLauncherTest extends DBTestCase {
 
+    private static Logger logger = LoggerFactory.getLogger(EtlLauncherTest.class);
+
     public void testLaunch() {
-        final List<String> files = new ArrayList<String>();
+        final List<String> files = new ArrayList<>();
 
         EtlLauncher etlLauncher = new EtlLauncher() {
             @Override
             protected boolean isFile(File file) {
-                return file.getName().indexOf("_nofile_") < 0;
+                return !file.getName().contains("_nofile_");
             }
 
             @Override
@@ -75,7 +79,6 @@ public class EtlLauncherTest extends DBTestCase {
         };
         assertEquals(EtlLauncher.ErrorCode.FILE_NOT_FOUND, etlLauncher.launch(new String[]{}));
 
-
     }
 
     public void testFile() {
@@ -93,24 +96,21 @@ public class EtlLauncherTest extends DBTestCase {
         URL u = IOUtils.toUrl(launcher.resolveFile(null, fileName));
         final ObjectName mbeanName = new ObjectName("scriptella:type=etl,url=" + ObjectName.quote(u.toString()));
         final MBeanServer srv = ManagementFactory.getPlatformMBeanServer();
-        Callable r = new Callable() {
-            public String call() throws Exception {
-                try {
-                    final Number n = (Number) srv.getAttribute(
-                            mbeanName,
-                            "ExecutedStatementsCount");
-                    assertEquals(2, n.intValue());
-                } catch (Exception e) {
-                    fail(e.getMessage());
-                }
-                //Check if cancellation is working
-                srv.invoke(mbeanName, "cancel", null, null);
-                return "";
+        launcher.enabledJmx(true);
+        launcher.setProperties(Collections.singletonMap("callback", (Callable<String>) () -> {
+            try {
+                final Number n = (Number) srv.getAttribute(mbeanName, "ExecutedStatementsCount");
+                assertEquals(2, n.intValue());
+            } catch (Exception e) {
+                fail(e.getMessage());
             }
-        };
-        launcher.setProperties(Collections.singletonMap("callback", r));
+            //Check if cancellation is working
+            srv.invoke(mbeanName, "cancel", null, null);
+            return "";
+        }));
 
-        assertEquals(EtlLauncher.ErrorCode.FAILED, launcher.launch(new String[]{fileName}));
+        var code = launcher.launch(new String[]{fileName});
+        assertEquals(EtlLauncher.ErrorCode.FAILED, code);
         assertFalse(srv.isRegistered(mbeanName));
     }
 
@@ -124,24 +124,22 @@ public class EtlLauncherTest extends DBTestCase {
         assertTrue(TemplateManagerTest.TestTemplate.created);
     }
 
-
     public void testNoStat() {
 
         final boolean[] nostat = {false};
         final boolean[] executed = {false};
+
         EtlLauncher l = new EtlLauncher() {
             public void setNoStat(boolean suppressStatistics) {
                 nostat[0] = suppressStatistics;
             }
 
-
             protected boolean isFile(File file) {
                 return true;
             }
 
-            public void execute(File file) throws EtlExecutorException {
+            public void execute(File file) {
                 executed[0] = true;
-
             }
         };
         l.launch(new String[]{"-d", "-nostat"});

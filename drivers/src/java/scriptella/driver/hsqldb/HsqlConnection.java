@@ -16,13 +16,13 @@
 package scriptella.driver.hsqldb;
 
 import scriptella.jdbc.JdbcConnection;
-import scriptella.jdbc.JdbcUtils;
 import scriptella.spi.ConnectionParameters;
 
 import java.sql.Connection;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Hsqldb connection wrapper.
@@ -39,7 +39,7 @@ public class HsqlConnection extends JdbcConnection {
      */
     public static final String SHUTDOWN_ON_EXIT = "shutdown_on_exit";
 
-    private static final Logger LOG = Logger.getLogger(HsqlConnection.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(HsqlConnection.class.getName());
     private boolean shutdownOnExit;
 
     /**
@@ -60,20 +60,15 @@ public class HsqlConnection extends JdbcConnection {
 
     void shutdown() {
         assert shutdownOnExit;
-        Connection con = getNativeConnection();
-        Statement st = null;
-        try {
-            if (con == null || con.isClosed()) {
+
+        try (Connection con = getNativeConnection(); Statement st = con.createStatement()) {
+            if (con.isClosed()) {
                 LOG.info("Unable to correctly shutdown in-process HSQLDB. Connection has already already been closed");
                 return;
             }
-            st = con.createStatement();
             st.execute("SHUTDOWN");
         } catch (Exception e) {
-            LOG.log(Level.WARNING, "Problem occured while trying to shutdown in-process HSQLDB", e);
-        } finally {
-            JdbcUtils.closeSilent(st);
-            JdbcUtils.closeSilent(con);
+            LOG.error("Problem occured while trying to shutdown in-process HSQLDB");
         }
     }
 

@@ -14,7 +14,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -33,14 +34,15 @@
             <artifactId>scriptella-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.scriptella</groupId>
-            <artifactId>scriptella-core</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
+            <groupId>org.apache.groovy</groupId>
+            <artifactId>groovy-jsr223</artifactId>
+            <version>4.0.6</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-jexl</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>javax.mail</groupId>
@@ -54,8 +56,15 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring</artifactId>
+            <artifactId>spring-context</artifactId>
             <optional>true</optional>
+            <version>5.3.16</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <optional>true</optional>
+            <version>5.3.16</version>
         </dependency>
         <dependency>
             <groupId>org.apache.velocity</groupId>
@@ -66,10 +75,17 @@
         <!-- https://github.com/scriptella/scriptella-etl/issues/2
         We are using javax.script adapter for Rhino provided by https://www.inspiracio.cat -->
         <dependency>
-                <groupId>cat.inspiracio</groupId>
+            <groupId>cat.inspiracio</groupId>
             <artifactId>rhino-js-engine</artifactId>
+            <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>org.scriptella</groupId>
+            <artifactId>scriptella-core</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>

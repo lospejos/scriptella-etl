@@ -65,7 +65,7 @@ public class XmlElement {
     }
 
     public String getXPath() {
-        List<String> l = new ArrayList<String>();
+        List<String> l = new ArrayList<>();
         Node cur = element;
         StringBuilder tmp = new StringBuilder();
         String nearestIDSelector = null;
@@ -76,7 +76,7 @@ public class XmlElement {
                 nearestIDSelector = "id(\"" + id + "\")";
                 break;
             }
-            
+
             int pos = 1;
             Node sib = cur;
             final String curTagName = ((Element) cur).getTagName();
@@ -120,7 +120,7 @@ public class XmlElement {
     }
 
     public List<XmlElement> getChildren(final String name) {
-        List<XmlElement> res = new ArrayList<XmlElement>();
+        List<XmlElement> res = new ArrayList<>();
         Node node = element.getFirstChild();
 
         while (node != null) {
@@ -137,7 +137,7 @@ public class XmlElement {
     }
 
     public List<XmlElement> getChildren(final Set<String> names) {
-        List<XmlElement> res = new ArrayList<XmlElement>();
+        List<XmlElement> res = new ArrayList<>();
         Node node = element.getFirstChild();
 
         while (node != null) {
@@ -170,7 +170,7 @@ public class XmlElement {
     }
 
     protected List<XmlElement> asList(final NodeList list) {
-        List<XmlElement> result = new ArrayList<XmlElement>();
+        List<XmlElement> result = new ArrayList<>();
         Node node = element.getFirstChild();
 
         while (node != null) {

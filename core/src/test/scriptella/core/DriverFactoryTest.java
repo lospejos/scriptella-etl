@@ -17,7 +17,8 @@ package scriptella.core;
 
 import scriptella.AbstractTestCase;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Tests for {@link scriptella.core.DriverFactory}.
@@ -26,7 +27,7 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 public class DriverFactoryTest extends AbstractTestCase {
-    private static final Logger logger = Logger.getLogger(DriverFactoryTest.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(DriverFactoryTest.class.getName());
     public static final String SUN_JDBC_ODBC_JDBC_ODBC_DRIVER = "sun.jdbc.odbc.JdbcOdbcDriver";
     private static boolean skipJdbcOdbc;
 
@@ -35,7 +36,7 @@ public class DriverFactoryTest extends AbstractTestCase {
             Class.forName(SUN_JDBC_ODBC_JDBC_ODBC_DRIVER);
         } catch (ClassNotFoundException e) {
             skipJdbcOdbc = true;
-            logger.warning(SUN_JDBC_ODBC_JDBC_ODBC_DRIVER + " not available starting from JDK8 - skipping related tests");
+            LOG.warn(SUN_JDBC_ODBC_JDBC_ODBC_DRIVER + " not available starting from JDK8 - skipping related tests");
         }
     }
 

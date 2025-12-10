@@ -43,7 +43,7 @@ public class DataMigratorITest extends AbstractTestCase {
     public void test() throws IOException, EtlExecutorException {
         DataMigrator dm = new DataMigrator() {
 
-            protected Writer newFileWriter(String fileName) throws IOException {
+            protected Writer newFileWriter(String fileName) {
                 if (fileName.endsWith(".xml")) {
                     return etlFile;
                 }
@@ -55,7 +55,7 @@ public class DataMigratorITest extends AbstractTestCase {
             }
         };
         newEtlExecutor().execute();
-        Map<String,String> props = new HashMap<String, String>();
+        Map<String,String> props = new HashMap<>();
         props.put(DataMigrator.DRIVER_PROPERTY_NAME, "org.hsqldb.jdbcDriver");
         props.put(DataMigrator.URL_PROPERTY_NAME, "jdbc:hsqldb:mem:dataMigratorTest");
         props.put(DataMigrator.USER_PROPERTY_NAME, "sa");

@@ -32,11 +32,14 @@ import java.io.Reader;
  * @author Fyodor Kupolov
  */
 class ScriptEngineWrapper implements Closeable {
+
+    private final String lang;
     private ScriptEngine scriptEngine;
     private Compilable compilable;
     private boolean nashornScriptEngine;
 
-    public ScriptEngineWrapper(ScriptEngine scriptEngine) {
+    public ScriptEngineWrapper(String lang, ScriptEngine scriptEngine) {
+        this.lang = lang;
         this.scriptEngine = scriptEngine;
         if (scriptEngine instanceof Compilable) {
             compilable = (Compilable) scriptEngine;
@@ -79,6 +82,9 @@ class ScriptEngineWrapper implements Closeable {
 
     @Override
     public void close() throws IOException {
-        scriptEngine.getContext().getWriter().close();
+        // Global ScriptEngine created by ScriptEngineManager.getEngineByName(lang)
+        if (!lang.equalsIgnoreCase("groovy")) {
+            scriptEngine.getContext().getWriter().close();
+        }
     }
 }

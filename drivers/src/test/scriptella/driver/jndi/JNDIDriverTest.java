@@ -23,7 +23,6 @@ import scriptella.spi.ConnectionParameters;
 import scriptella.spi.MockDriverContext;
 
 import javax.naming.Context;
-import javax.naming.NamingException;
 import javax.naming.spi.InitialContextFactory;
 import javax.sql.DataSource;
 import java.lang.reflect.InvocationHandler;
@@ -34,7 +33,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Tests JNDI driver class.
@@ -44,14 +45,16 @@ import java.util.logging.Logger;
  */
 public class JNDIDriverTest extends AbstractTestCase {
 
+    private static final Logger logger = LoggerFactory.getLogger(JNDIDriverTest.class);
+
     /**
      * Tests the driver by emulating the JNDI environment with a JNDI-bound datasource.
      */
-    public void testGetConnection() throws NamingException {
+    public void testGetConnection() {
         //Just to initialize HSLQB driver class
-        Logger.getAnonymousLogger().fine("Initializing " + new scriptella.driver.hsqldb.Driver());
+        logger.debug("Initializing " + new scriptella.driver.hsqldb.Driver());
         //Preparing the environment
-        Map<String, String> env = new HashMap<String, String>();
+        Map<String, String> env = new HashMap<>();
         //Setting up a test JNDI factory
         env.put(Context.INITIAL_CONTEXT_FACTORY, CtxFactory.class.getName());
         CtxFactory.jndiName = "datasourceName";
@@ -95,7 +98,7 @@ public class JNDIDriverTest extends AbstractTestCase {
         public static int lookups;
         public static int connections;
 
-        public Context getInitialContext(Hashtable<?, ?> environment) throws NamingException {
+        public Context getInitialContext(Hashtable<?, ?> environment) {
             return (Context) Proxy.newProxyInstance(getClass().getClassLoader(),
                     new Class<?>[]{Context.class, DataSource.class}, this);
         }

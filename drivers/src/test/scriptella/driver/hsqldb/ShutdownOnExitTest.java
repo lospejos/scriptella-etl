@@ -37,9 +37,9 @@ import java.util.Properties;
  * @version 1.0
  */
 public class ShutdownOnExitTest extends AbstractTestCase {
-    public void test() throws SQLException {
+    public void test() throws SQLException, InterruptedException {
         Driver drv = new Driver();
-        Map<String, String> props = new HashMap<String, String>();
+        Map<String, String> props = new HashMap<>();
 
         final String url = "jdbc:hsqldb:mem:shutdowntest";
         MockConnectionEl conf = new MockConnectionEl(props, url);
@@ -58,7 +58,8 @@ public class ShutdownOnExitTest extends AbstractTestCase {
         JdbcConnection con2 = drv.connect(params2);
         con2.close();
         con.close();
-        Driver.HOOK.run(); //emulates shutdown hook
+        Driver.HOOK.start(); //emulates shutdown hook
+        Thread.sleep(2000);
         assertDatabaseShutdown(url);
     }
 
@@ -70,7 +71,7 @@ public class ShutdownOnExitTest extends AbstractTestCase {
             final Connection con = DriverManager.getConnection(url, props);
             JdbcUtils.closeSilent(con);
         } catch (SQLException e) {
-            assertTrue("Driver.HOOK must shutdown the database " + url, e.getErrorCode() == -94);
+            assertEquals("Driver.HOOK must shutdown the database " + url, -94, e.getErrorCode());
             return; //OK
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,7 +87,7 @@ public class ShutdownOnExitTest extends AbstractTestCase {
      */
     public void testAlreadyClosed() throws SQLException {
         Driver drv = new Driver();
-        Map<String, String> props = new HashMap<String, String>();
+        Map<String, String> props = new HashMap<>();
 
         final String url = "jdbc:hsqldb:mem:alreadyClosed";
         MockConnectionEl conf = new MockConnectionEl(props, url);
@@ -103,11 +104,10 @@ public class ShutdownOnExitTest extends AbstractTestCase {
      * Tests if different databases are independently shutdown, i.e. closing one db
      * does not affect other.
      *
-     * @throws SQLException
      */
-    public void testDifferentDbs() throws SQLException {
+    public void testDifferentDbs() {
         Driver drv = new Driver();
-        Map<String, String> props = new HashMap<String, String>();
+        Map<String, String> props = new HashMap<>();
 
         //Create first db and obtain 2 connections
         String url1 = "jdbc:hsqldb:mem:DifferentDbs1";

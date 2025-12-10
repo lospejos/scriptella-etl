@@ -63,7 +63,7 @@ public final class IOUtils {
         if (closeable != null) {
             try {
                 closeable.close();
-            } catch (Exception e) {
+            } catch (IOException | UnsupportedOperationException e) {
                 ExceptionUtils.ignoreThrowable(e);
             }
         }

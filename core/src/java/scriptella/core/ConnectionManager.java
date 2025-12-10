@@ -18,20 +18,18 @@ package scriptella.core;
 import scriptella.configuration.ConfigurationException;
 import scriptella.configuration.ConnectionEl;
 import scriptella.execution.EtlContext;
+import scriptella.jdbc.JdbcConnection;
 import scriptella.spi.Connection;
 import scriptella.spi.ConnectionParameters;
 import scriptella.spi.ScriptellaDriver;
 import scriptella.util.UrlPathTokenizer;
 
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * TODO: Add documentation
@@ -40,7 +38,8 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 public class ConnectionManager {
-    private static final Logger LOG = Logger.getLogger(ConnectionManager.class.getName());
+
+    private static final Logger LOG = LoggerFactory.getLogger(ConnectionManager.class.getName());
     Connection connection;
     List<Connection> newConnections;
     private ScriptellaDriver driver;
@@ -49,28 +48,26 @@ public class ConnectionManager {
     public ConnectionManager(EtlContext ctx, ConnectionEl c) {
         //Obtains a classloader
         ClassLoader cl = getClass().getClassLoader();
-        if (c.getClasspath() != null) { //if classpath specified
-            //Parse it and create a new classloader
-            UrlPathTokenizer tok = new UrlPathTokenizer(ctx.getScriptFileURL());
-            try {
-                final URL[] urls = tok.split(c.getClasspath());
-                if (urls.length > 0) {
-                    cl = AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
-                        public ClassLoader run() {
-                            return new DriverClassLoader(urls);
-                        }
-                    });
-                }
-            } catch (MalformedURLException e) {
-                throw new ConfigurationException("Unable to parse classpath parameter for " + c, e);
-            }
-        }
         connectionParameters = new ConnectionParameters(c, ctx);
         try {
             driver = DriverFactory.getDriver(c.getDriver(), cl);
         } catch (ClassNotFoundException e) {
-            throw new ConfigurationException("Driver class " + c.getDriver() + " not found for " + connectionParameters +
-                    ".Please check if the class name is correct and required libraries available on classpath", e);
+            if (c.getClasspath() != null) { //if classpath specified
+                //Parse it and create a new classloader
+                UrlPathTokenizer tok = new UrlPathTokenizer(ctx.getScriptFileURL());
+                try {
+                    final URL[] urls = tok.split(c.getClasspath());
+                    if (urls.length > 0) {
+                        cl = new DriverClassLoader(urls);
+                    }
+                    driver = DriverFactory.getDriver(c.getDriver(), cl);
+                } catch (Exception ex) {
+                    throw new ConfigurationException("Unable to parse classpath parameter for " + c, ex);
+                }
+            } else {
+                throw new ConfigurationException("Driver class " + c.getDriver() + " not found for " + connectionParameters +
+                        ".Please check if the class name is correct and required libraries available on classpath", e);
+            }
         } catch (Exception e) {
             throw new ConfigurationException("Unable to initialize driver for " + connectionParameters + ":" + e.getMessage(), e);
         }
@@ -94,7 +91,7 @@ public class ConnectionManager {
         }
 
         if (newConnections == null) {
-            newConnections = new ArrayList<Connection>();
+            newConnections = new ArrayList<>();
         }
 
         newConnections.add(c);
@@ -105,42 +102,41 @@ public class ConnectionManager {
     public void rollback() {
         for (Connection c : getAllConnections()) {
             try {
-                if (LOG.isLoggable(Level.FINE)) {
-                    LOG.fine("Rolling back " + c);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Rolling back " + c);
                 }
-                c.rollback();
+                if (c instanceof JdbcConnection) {
+                    c.rollback();
+                }
             } catch (UnsupportedOperationException e) {
                 String msg = e.getMessage();
-                LOG.log(Level.WARNING,
-                        "Unable to rollback transaction for connection " + c + (msg == null ? "" : ": " + msg));
+                LOG.warn("Unable to rollback transaction for connection " + c + (msg == null ? "" : ": " + msg));
 
             } catch (Exception e) {
-                LOG.log(Level.WARNING,
-                        "Unable to rollback transaction for connection " + c, e);
+                LOG.warn("Unable to rollback transaction for connection " + c, e);
             }
         }
     }
 
     public void commit() {
         for (Connection c : getAllConnections()) {
-            if (LOG.isLoggable(Level.FINE)) {
-                LOG.fine("Commiting connection " + c);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Commiting connection " + c);
             }
             c.commit();
         }
     }
 
-
     public void close() {
         for (Connection c : getAllConnections()) {
             if (c != null) {
                 try {
-                    if (LOG.isLoggable(Level.FINE)) {
-                        LOG.fine("Closing " + c);
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Closing " + c);
                     }
                     c.close();
                 } catch (Exception e) {
-                    LOG.log(Level.WARNING, "Problem occured while trying to close connection " + c, e);
+                    LOG.error("Problem occured while trying to close connection " + c, e);
                 }
             }
         }
@@ -172,7 +168,7 @@ public class ConnectionManager {
      * @return connection and newtx connections
      */
     private List<Connection> getAllConnections() {
-        List<Connection> cl = new ArrayList<Connection>();
+        List<Connection> cl = new ArrayList<>();
 
         if (newConnections != null) {
             cl.addAll(newConnections);
@@ -183,6 +179,5 @@ public class ConnectionManager {
         }
         return cl;
     }
-
 
 }

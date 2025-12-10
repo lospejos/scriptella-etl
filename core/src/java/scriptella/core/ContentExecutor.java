@@ -24,8 +24,8 @@ import scriptella.spi.Connection;
 import scriptella.spi.DialectIdentifier;
 import scriptella.spi.Resource;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base class for Script/Query executors.
@@ -37,8 +37,7 @@ abstract class ContentExecutor<T extends ScriptingElement> implements Executable
     private Resource cachedContent; //initialized on the first execution
     private T element;
     private PropertiesSubstitutor contentPropsSubstitutor;
-    protected final Logger log = Logger.getLogger(getClass().getName());
-    protected final boolean debug = log.isLoggable(Level.FINE);
+    protected final Logger LOG = LoggerFactory.getLogger(getClass().getName());
 
     /**
      * Initializes and stores reference to script element.
@@ -50,7 +49,7 @@ abstract class ContentExecutor<T extends ScriptingElement> implements Executable
     }
 
     /**
-     * Returns scripting element specified in {@link #ContentExecutor constructor}
+     * Returns scripting element specified in {@link ContentExecutor }
      *
      * @return scripting element
      */
@@ -62,8 +61,8 @@ abstract class ContentExecutor<T extends ScriptingElement> implements Executable
     public final void execute(final DynamicContext ctx) {
         final Connection c = ctx.getConnection();
         final Resource content = getContent(c.getDialectIdentifier());
-        if (content == ContentEl.NULL_CONTENT && debug) {
-            log.fine("Element " + getLocation() + " has no supported dialects, no content executed.");
+        if (content == ContentEl.NULL_CONTENT && LOG.isDebugEnabled()) {
+            LOG.debug("Element " + getLocation() + " has no supported dialects, no content executed.");
         }
         try {
             //Set parameters if content is dynamic
@@ -110,7 +109,7 @@ abstract class ContentExecutor<T extends ScriptingElement> implements Executable
     }
 
     /**
-     * A short for {@link #getElement()}.{@link scriptella.configuration.ScriptingElement#getLocation() getLocation()}
+     * A short for {@link #getElement()}.{@link scriptella.configuration.ScriptingElement#getLocation()}
      *
      * @return element location.
      */

@@ -15,11 +15,6 @@
  */
 package scriptella.configuration;
 
-import org.w3c.dom.Document;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXParseException;
 import scriptella.expression.PropertiesSubstitutor;
 import scriptella.spi.ParametersCallback;
 import scriptella.spi.support.HierarchicalParametersCallback;
@@ -32,7 +27,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
-import java.util.logging.Logger;
+import java.util.Objects;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXParseException;
 
 
 /**
@@ -42,7 +45,7 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 public class ConfigurationFactory {
-    private static final Logger LOG = Logger.getLogger(ConfigurationFactory.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ConfigurationFactory.class.getName());
     private static final DocumentBuilderFactory DBF = DocumentBuilderFactory.newInstance();
     private static final String DTD_NAME = "etl.dtd";
     private static final String RES_PATH = "/scriptella/dtd/" + DTD_NAME;
@@ -143,11 +146,11 @@ public class ConfigurationFactory {
     };
     private static final ErrorHandler ETL_ERROR_HANDLER = new ErrorHandler() {
         public void warning(final SAXParseException exception) {
-            LOG.warning(messageFor(exception));
+            LOG.warn(messageFor(exception));
         }
 
         public void error(final SAXParseException exception) {
-            LOG.warning(messageFor(exception));
+            LOG.warn(messageFor(exception));
         }
 
         private String messageFor(final SAXParseException exception) {
@@ -155,13 +158,7 @@ public class ConfigurationFactory {
             sb.append("XML configuration warning in ");
 
             final String sid = exception.getSystemId();
-
-            if (sid != null) {
-                sb.append(sid);
-            } else {
-                sb.append("the document");
-            }
-
+            sb.append(Objects.requireNonNullElse(sid, "the document"));
             sb.append('(');
             sb.append(exception.getLineNumber());
             sb.append(':');
@@ -173,7 +170,7 @@ public class ConfigurationFactory {
         }
 
         public void fatalError(final SAXParseException exception) {
-            LOG.severe(messageFor(exception));
+            LOG.error(messageFor(exception));
         }
     };
 

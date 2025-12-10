@@ -50,7 +50,7 @@ public class ParametersParserTest extends TestCase {
     /**
      * Tests invalid file references
      */
-    public void testInvalid() throws MalformedURLException {
+    public void testInvalid() {
 
         ParametersParser p = new ParametersParser(MockDriverContext.INSTANCE);
 

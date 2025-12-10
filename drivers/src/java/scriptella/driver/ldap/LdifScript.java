@@ -35,8 +35,9 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Executor for LDIF script.
@@ -45,7 +46,7 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 public class LdifScript {
-    private static final Logger LOG = Logger.getLogger(LdifScript.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(LdifScript.class.getName());
     //Parsing options for DN, TODO maybe replace with a DirCtx name parser?
     static final Properties DN_SYNTAX = new Properties();
 
@@ -116,8 +117,8 @@ public class LdifScript {
      * @throws NamingException if operation with directory failed.
      */
     static void modify(DirContext ctx, final Entry e) throws NamingException {
-        if (LOG.isLoggable(Level.FINE)) {
-            LOG.fine("Processing " + e);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Processing " + e);
         }
         Attributes atts = e.getAttributes();
         final String rootDn = ctx.getNameInNamespace();

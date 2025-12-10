@@ -16,7 +16,9 @@
 package scriptella.interactive;
 
 import java.text.DecimalFormat;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -26,7 +28,7 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 public class ConsoleProgressIndicator extends ProgressIndicatorBase {
-    private static final Logger LOG = Logger.getLogger(ConsoleProgressIndicator.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ConsoleProgressIndicator.class.getName());
     private final DecimalFormat decimalFormat = new DecimalFormat("###");
     private String title;
 

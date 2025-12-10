@@ -34,7 +34,7 @@ import java.util.Map;
  * @version 1.0
  */
 public class VelocityScriptTest extends DBTestCase {
-    private Map<String, Object> params = new HashMap<String, Object>();
+    private Map<String, Object> params = new HashMap<>();
     private ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 

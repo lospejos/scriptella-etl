@@ -60,7 +60,7 @@ public class ShellCommandRunnerTest extends AbstractTestCase {
         }
 
         @Override
-        protected void waitForProc() throws InterruptedException {
+        protected void waitForProc() {
         }
     }
 }

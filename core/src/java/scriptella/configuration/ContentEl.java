@@ -40,7 +40,7 @@ public class ContentEl extends XmlConfigurableBase implements Resource {
      * case too much memory is used.
      */
     private static final int MAX_CONCAT_RESOURCE_LENGTH = 1024 * 128; //128Kb
-    private List<Resource> content = new ArrayList<Resource>();
+    private List<Resource> content = new ArrayList<>();
     /**
      * Null-Object to use instead of null if necessary
      */

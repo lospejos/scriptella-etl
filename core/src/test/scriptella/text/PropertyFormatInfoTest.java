@@ -18,8 +18,8 @@ import java.util.Set;
  */
 public class PropertyFormatInfoTest extends TestCase {
 
-    public void testParse() throws Exception {
-        Map<String, Object> map = new LinkedHashMap<String, Object>();
+    public void testParse() {
+        Map<String, Object> map = new LinkedHashMap<>();
         map.put("format.colA.pattern", "00.0");
         map.put("format.colA.type", "number");
         map.put("format.col.B.trim", "true"); //dots in names are allowed
@@ -27,7 +27,7 @@ public class PropertyFormatInfoTest extends TestCase {
         map.put("parse.colC.null_string", ""); //should be ignored
         final PropertyFormatInfo metadata = PropertyFormatInfo.parse(new TypedPropertiesSource(map), "format.");
         final Set<String> names = metadata.getFormatMap().keySet();
-        assertEquals(new LinkedHashSet<String>(Arrays.asList("colA", "col.B")), names);
+        assertEquals(new LinkedHashSet<>(Arrays.asList("colA", "col.B")), names);
         PropertyFormat col = metadata.getPropertyFormat("colA");
         assertEquals("00.0", col.getPattern());
         assertEquals("number", col.getType());
@@ -36,8 +36,8 @@ public class PropertyFormatInfoTest extends TestCase {
         assertTrue(col.isTrim());
     }
 
-    public void testParseLegacyNullString() throws Exception {
-        Map<String, Object> map = new LinkedHashMap<String, Object>();
+    public void testParseLegacyNullString() {
+        Map<String, Object> map = new LinkedHashMap<>();
         map.put("format.colA.pattern", "00.0");
         map.put("format.colA.type", "number");
         map.put("format.col.B.trim", "true"); //dots in names are allowed
@@ -45,7 +45,7 @@ public class PropertyFormatInfoTest extends TestCase {
         map.put("parse.colC.null_string", ""); //should be ignored
         final PropertyFormatInfo metadata = PropertyFormatInfo.parse(new TypedPropertiesSource(map), "format.");
         final Set<String> names = metadata.getFormatMap().keySet();
-        assertEquals(new LinkedHashSet<String>(Arrays.asList("colA", "col.B")), names);
+        assertEquals(new LinkedHashSet<>(Arrays.asList("colA", "col.B")), names);
         PropertyFormat col = metadata.getPropertyFormat("colA");
         assertEquals("00.0", col.getPattern());
         assertEquals("number", col.getType());
@@ -55,19 +55,19 @@ public class PropertyFormatInfoTest extends TestCase {
     }
 
 
-    public void testParseNoPrefix() throws Exception {
-        Map<String, Object> map = new LinkedHashMap<String, Object>();
+    public void testParseNoPrefix() {
+        Map<String, Object> map = new LinkedHashMap<>();
         map.put("colA.pattern", "00.0");
         map.put("colB.trim", "true");
         map.put("prefix.column.type", "number"); //wrong definition should be recognized as "prefix"
         final PropertyFormatInfo metadata = PropertyFormatInfo.parse(new TypedPropertiesSource(map), "");
         final Set<String> names = metadata.getFormatMap().keySet();
-        assertEquals(new LinkedHashSet<String>(Arrays.asList("colA", "colB", "prefix.column")), names);
+        assertEquals(new LinkedHashSet<>(Arrays.asList("colA", "colB", "prefix.column")), names);
     }
 
     public void testSetProperty() {
         PropertyFormat ci = new PropertyFormat();
-        Map<String, Object> p = new HashMap<String, Object>();
+        Map<String, Object> p = new HashMap<>();
         p.put("a.type", "number");
         p.put("a.pattern", "#");
         p.put("a.locale", "ru_RU");
@@ -90,7 +90,7 @@ public class PropertyFormatInfoTest extends TestCase {
     }
 
     public void testDefaults() {
-        Map<String, Object> map = new LinkedHashMap<String, Object>();
+        Map<String, Object> map = new LinkedHashMap<>();
         map.put("format.trim", "true");
         map.put("format.null_string", "--");
         map.put("format.pad_left", "10");

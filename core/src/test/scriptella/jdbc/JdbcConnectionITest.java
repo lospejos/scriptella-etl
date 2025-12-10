@@ -40,7 +40,7 @@ public class JdbcConnectionITest extends DBTestCase {
         Connection c = getConnection("jdbcconitest");
         newEtlExecutor().execute();
         //Verify results1 for batch execution
-        final List<String> results = new ArrayList<String>();
+        final List<String> results = new ArrayList<>();
         QueryHelper q = new QueryHelper("SELECT * FROM BatchTestResults");
         q.execute(c, new QueryCallback() {
             public void processRow(ParametersCallback parameters) {

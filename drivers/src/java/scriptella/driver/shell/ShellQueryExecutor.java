@@ -27,7 +27,9 @@ import java.io.IOException;
 import java.io.PipedReader;
 import java.io.PipedWriter;
 import java.io.Reader;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class executes a shell script from the body of the query and exports its output as a set of rows,
@@ -40,7 +42,7 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 class ShellQueryExecutor implements ParametersCallback {
-    private static final Logger LOG = Logger.getLogger(ShellQueryExecutor.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ShellQueryExecutor.class.getName());
     private static final int MAX_LENGTH = 100000; // 100Kb max query size
 
     private final PropertiesSubstitutor ps;

@@ -29,7 +29,7 @@ import java.util.WeakHashMap;
  * @version 1.0
  */
 public abstract class Expression {
-    private static final Map<String, Expression> EXPRESSIONS_CACHE = new WeakHashMap<String, Expression>();
+    private static final Map<String, Expression> EXPRESSIONS_CACHE = new WeakHashMap<>();
     private String expression;
 
     protected Expression(String expression) {

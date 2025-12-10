@@ -30,8 +30,9 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -41,13 +42,13 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 class SqlExecutor extends SqlParserBase implements Closeable {
-    private static final Logger LOG = Logger.getLogger(SqlExecutor.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(SqlExecutor.class.getName());
     protected final Resource resource;
     protected final JdbcConnection connection;
     protected final StatementCache cache;
     private QueryCallback callback;
     private ParametersCallback paramsCallback;
-    private List<Object> params = new ArrayList<Object>();
+    private List<Object> params = new ArrayList<>();
     private int updateCount;//number of updated rows
     private final AbstractConnection.StatementCounter counter;
     private SqlTokenizer cachedTokenizer;
@@ -88,7 +89,7 @@ class SqlExecutor extends SqlParserBase implements Closeable {
         if (cache) {
             cachedTokenizer=tok;
         }
-        
+
 
     }
 
@@ -120,7 +121,7 @@ class SqlExecutor extends SqlParserBase implements Closeable {
     @Override
     public void statementParsed(final String sql) {
         EtlCancelledException.checkEtlCancelled();
-        StatementWrapper sw = null;
+        StatementWrapper<?> sw = null;
         try {
             sw = cache.prepare(sql, params);
             int updatedRows = -1;
@@ -131,9 +132,7 @@ class SqlExecutor extends SqlParserBase implements Closeable {
             }
             logExecutedStatement(sql, params, updatedRows);
             if (connection.autocommitSize > 0 && (counter.statements % connection.autocommitSize == 0)) {
-                if (LOG.isLoggable(Level.FINE)) {
-                    LOG.fine("Committing transaction after " + connection.autocommitSize + " statements");
-                }
+                LOG.info("Committing transaction after " + connection.autocommitSize + " statements");
                 connection.commit();
             }
         } catch (SQLException e) {
@@ -162,16 +161,16 @@ class SqlExecutor extends SqlParserBase implements Closeable {
         try {
             warnings = connection.getNativeConnection().getWarnings();
         } catch (Exception e) {
-            LOG.log(Level.WARNING, "Failed to obtain SQL warnings", e);
+            LOG.error("Failed to obtain SQL warnings", e);
 
         }
-        Level level = warnings == null ? Level.FINE : Level.INFO;
-        if (warnings != null) { //If warnings present - use INFO priority
-            level = Level.INFO;
-        }
+        boolean isWarning = warnings != null;
+        // if (warnings != null) { //If warnings present - use INFO priority
+        //     level = Level.INFO;
+        // }
 
-        if (LOG.isLoggable(level)) {
-            StringBuilder sb = new StringBuilder("     Executed statement ");
+        if (isWarning || LOG.isDebugEnabled()) {
+            StringBuilder sb = new StringBuilder("Executed statement ");
             sb.append(StringUtils.consoleFormat(sql));
             if (!parameters.isEmpty()) {
                 sb.append(", Parameters: ").append(parameters);
@@ -179,7 +178,7 @@ class SqlExecutor extends SqlParserBase implements Closeable {
             if (updateCount >= 0) {
                 sb.append(". Update count: ").append(updateCount);
             }
-            if (warnings != null) { //Iterate warnings
+            if (isWarning) { //Iterate warnings
                 sb.append(". SQL Warnings:");
                 do {
                     sb.append("\n * ").append(warnings);
@@ -188,11 +187,15 @@ class SqlExecutor extends SqlParserBase implements Closeable {
                 try {
                     connection.getNativeConnection().clearWarnings();
                 } catch (Exception e) { //catch everything because drivers may violate rules and throw any exception
-                    LOG.log(Level.WARNING, "Failed to clear SQL warnings", e);
+                    LOG.error("Failed to clear SQL warnings", e);
                 }
             }
 
-            LOG.log(level, sb.toString());
+            if (isWarning) {
+                LOG.warn(sb.toString());
+            } else {
+                LOG.debug(sb.toString());
+            }
         }
     }
 

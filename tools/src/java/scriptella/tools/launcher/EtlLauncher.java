@@ -15,6 +15,11 @@
  */
 package scriptella.tools.launcher;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.IThrowableProxy;
+import ch.qos.logback.classic.spi.LoggingEvent;
+import ch.qos.logback.core.ConsoleAppender;
 import scriptella.configuration.ConfigurationEl;
 import scriptella.configuration.ConfigurationFactory;
 import scriptella.execution.EtlExecutor;
@@ -40,12 +45,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
-
 
 /**
  * Command line launcher.
@@ -54,7 +53,9 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 public class EtlLauncher {
-    private static final Logger LOG = Logger.getLogger(EtlLauncher.class.getName());
+
+    private static final Logger logger = LoggingConfigurer.getScriptellaLogger();
+
     private static final PrintStream out = System.out;
     private static final PrintStream err = System.err;
 
@@ -68,27 +69,28 @@ public class EtlLauncher {
             errorCode = code;
         }
 
-        private int errorCode;
+        private final int errorCode;
 
         public int getErrorCode() {
             return errorCode;
         }
     }
 
-    public static final Formatter STD_FORMATTER = new Formatter() {
+    public static final ConsoleAppender<LoggingEvent> STD_FORMATTER = new ConsoleAppender<>() {
         private final MessageFormat f = new MessageFormat("{0,date} {0,time} <{1}> {2}");
-        private final Object args[] = new Object[3]; //arguments for formatter
+        private final Object[] args = new Object[3]; //arguments for formatter
         private final StringBuffer sb = new StringBuffer();
         private final Date d = new Date();
 
-        public synchronized String format(final LogRecord record) {
-            d.setTime(record.getMillis());
+        @Override
+        protected void append(LoggingEvent record) {
+            d.setTime(record.getTimeStamp());
             args[0] = d;
-            args[1] = record.getLevel().getLocalizedName();
+            args[1] = record.getLevel().levelStr;
             args[2] = record.getMessage();
 
             f.format(args, sb, null);
-            final Throwable err = record.getThrown();
+            final IThrowableProxy err = record.getThrowableProxy();
             sb.append('\n');
             if (err != null) {
                 sb.append(err.getMessage());
@@ -96,8 +98,10 @@ public class EtlLauncher {
             }
             final String s = sb.toString();
             sb.setLength(0);
-            return s;
+
+            super.append(record);
         }
+
     };
 
     private EtlExecutor exec = new EtlExecutor();
@@ -107,11 +111,10 @@ public class EtlLauncher {
     public static final String DEFAULT_FILE_NAME = "etl.xml";
 
     public EtlLauncher() {
-        exec.setJmxEnabled(true); //JMX monitoring is always enabled when launcher is used
+        exec.setJmxEnabled(false); //JMX monitoring is always disable when launcher is used
     }
 
     /**
-     *
      * @param suppressStatistics true if statistics must be suppressed.
      * @see scriptella.execution.EtlExecutor#setSuppressStatistics(boolean)
      */
@@ -122,10 +125,10 @@ public class EtlLauncher {
     /**
      * Suppress JMX MBean registration for monitoring.
      *
-     * @param noJmx true if JMX should be suppressed.
+     * @param enable true if JMX should be suppressed.
      */
-    public void setNoJmx(boolean noJmx) {
-        exec.setJmxEnabled(!noJmx);
+    public void enabledJmx(boolean enable) {
+        exec.setJmxEnabled(enable);
     }
 
     /**
@@ -136,16 +139,12 @@ public class EtlLauncher {
      * @see System#exit(int)
      */
     ErrorCode launch(String[] args) {
-        ConsoleHandler h = new ConsoleHandler();
-
-        h.setFormatter(STD_FORMATTER);
-        h.setLevel(Level.INFO);
         boolean failed = false;
-        List<File> files = new ArrayList<File>();
+        List<File> files = new ArrayList<>();
         ConsoleProgressIndicator indicator = new ConsoleProgressIndicator("Execution Progress");
 
         try {
-            List<String> arguments = new ArrayList<String>(Arrays.asList(args));
+            List<String> arguments = new ArrayList<>(Arrays.asList(args));
             while (!arguments.isEmpty()) {
                 String arg = arguments.get(0);
                 arguments.remove(0);
@@ -154,11 +153,11 @@ public class EtlLauncher {
                     return ErrorCode.OK;
                 }
                 if (arg.startsWith("-d")) {
-                    h.setLevel(Level.FINE);
+                    logger.setLevel(Level.DEBUG);
                     continue;
                 }
                 if (arg.startsWith("-q")) {
-                    h.setLevel(Level.WARNING);
+                    logger.setLevel(Level.WARN);
                     continue;
                 }
                 if (arg.startsWith("-v")) {
@@ -173,14 +172,13 @@ public class EtlLauncher {
                     continue;
                 }
                 if (arg.startsWith("-nojmx")) {
-                    setNoJmx(true);
+                    enabledJmx(false);
                     continue;
-				}
+                }
                 if (arg.startsWith("-")) {
                     err.println("Unrecognized option " + arg);
                     return ErrorCode.UNRECOGNIZED_OPTION;
-                }
-                if (!arg.startsWith("-")) {
+                } else {
                     files.add(resolveFile(null, arg));
                 }
             }
@@ -193,11 +191,8 @@ public class EtlLauncher {
             return ErrorCode.FILE_NOT_FOUND;
         }
 
-        if (indicator != null) {
-            setProgressIndicator(indicator);
-        }
+        setProgressIndicator(indicator);
 
-        LoggingConfigurer.configure(h);
         if (properties == null) {
             setProperties(CollectionUtils.asMap(System.getProperties()));
         }
@@ -206,11 +201,10 @@ public class EtlLauncher {
                 execute(file);
             } catch (Exception e) {
                 failed = true;
-                LOG.log(Level.SEVERE,
-                        "Script " + file + " execution failed.", e);
+                logger.error("Script " + file + " execution failed.", e);
                 if (BugReport.isPossibleBug(e)) {
-                    LOG.log(Level.SEVERE, new BugReport(e).toString());
-                } else if (h.getLevel().intValue() < Level.INFO.intValue()) {
+                    logger.error(new BugReport(e).toString());
+                } else if (logger.getLevel().toInt() < Level.INFO_INT) {
                     //Print stack trace of exception in debug mode
                     err.println("---------------Debug Stack Trace-----------------");
                     Throwable t = e.getCause() == null ? e : e.getCause();
@@ -218,8 +212,6 @@ public class EtlLauncher {
                 }
             }
         }
-        LoggingConfigurer.remove(h);
-
         return failed ? ErrorCode.FAILED : ErrorCode.OK;
     }
 
@@ -255,7 +247,7 @@ public class EtlLauncher {
             }
             TemplateManager.create(name, props);
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Template generation failed", e);
+            logger.error("Template generation failed", e);
             return ErrorCode.FAILED;
         }
         return ErrorCode.OK;
@@ -275,13 +267,11 @@ public class EtlLauncher {
         this.indicator = indicator;
     }
 
-    public void execute(final File file)
-            throws EtlExecutorException {
+    public void execute(final File file) throws EtlExecutorException {
         try {
             factory.setResourceURL(IOUtils.toUrl(file));
         } catch (MalformedURLException e) {
-            throw new IllegalArgumentException("Wrong file path " +
-                    file.getPath(), e);
+            throw new IllegalArgumentException("Wrong file path " + file.getPath(), e);
         }
 
         factory.setExternalParameters(properties);
@@ -289,11 +279,11 @@ public class EtlLauncher {
 
         exec.setConfiguration(c);
         ExecutionStatistics st = exec.execute(indicator);
-        if (LOG.isLoggable(Level.INFO)) {
+        if (logger.isInfoEnabled()) {
             if (!exec.isSuppressStatistics()) {
-                LOG.info("Execution statistics:\n" + st.toString());
+                logger.info("Execution statistics:\n" + st.toString());
             }
-            LOG.info("Successfully executed ETL file " + file);
+            logger.info("Successfully executed ETL file " + file);
         }
     }
 
@@ -331,7 +321,7 @@ public class EtlLauncher {
         return file.isFile();
     }
 
-    public static void main(final String args[]) {
+    public static void main(final String[] args) {
         EtlLauncher launcher = new EtlLauncher();
         System.exit(launcher.launch(args).getErrorCode());
     }
@@ -340,6 +330,7 @@ public class EtlLauncher {
      * Shutdown hook for ETL cancellation.
      */
     private static class EtlShutdownHook extends Thread {
+
         private static final EtlShutdownHook INSTANCE = new EtlShutdownHook();
 
         private EtlShutdownHook() {
@@ -351,7 +342,7 @@ public class EtlLauncher {
             if (!JmxEtlManager.findEtlMBeans().isEmpty()) {
                 System.out.println("Cancelling ETL tasks and rolling back changes...");
             }
-            //Cancel all ETL task, the findEtlMBeans result may be stale 
+            //Cancel all ETL task, the findEtlMBeans result may be stale
             int i = JmxEtlManager.cancelAll();
             if (i > 1) {
                 System.out.println(i + " ETL tasks cancelled");
@@ -359,6 +350,7 @@ public class EtlLauncher {
                 System.out.println("ETL cancelled");
             }
         }
+
     }
 
     static {
@@ -367,9 +359,8 @@ public class EtlLauncher {
         try {
             Runtime.getRuntime().addShutdownHook(EtlShutdownHook.INSTANCE);
         } catch (Exception e) {
-            LOG.log(Level.WARNING, "Unable to add shutdown hook. ETL will not be rolled back on abnormal termination.", e);
+            logger.warn("Unable to add shutdown hook. ETL will not be rolled back on abnormal termination.", e);
         }
     }
-
 
 }

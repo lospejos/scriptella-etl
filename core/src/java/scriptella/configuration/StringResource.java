@@ -55,7 +55,7 @@ public class StringResource implements Resource {
         this.description = description;
     }
 
-    public Reader open() throws IOException {
+    public Reader open() {
         return new StringReader(string);
     }
 

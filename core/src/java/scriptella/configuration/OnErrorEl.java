@@ -52,7 +52,7 @@ public class OnErrorEl extends XmlConfigurableBase {
         if (codestr == null) {
             codes = Collections.emptySet();
         } else {
-            codes = new LinkedHashSet<String>(Arrays.asList(CODES_SEPARATOR.split(codestr)));
+            codes = new LinkedHashSet<>(Arrays.asList(CODES_SEPARATOR.split(codestr)));
         }
         retry = element.getBooleanAttribute("retry", false);
         content = new DialectBasedContentEl(element);

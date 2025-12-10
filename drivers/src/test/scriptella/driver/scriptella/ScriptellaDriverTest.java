@@ -16,13 +16,7 @@
 package scriptella.driver.scriptella;
 
 import scriptella.AbstractTestCase;
-import scriptella.driver.spring.SpringDriverTest;
 import scriptella.execution.EtlExecutorException;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Integration test for {@link scriptella.driver.scriptella.Driver}.
@@ -30,12 +24,16 @@ import java.util.logging.Logger;
  * @author Fyodor Kupolov
  * @version 1.0
  */
-public class ScriptellaDriverITest extends AbstractTestCase {
-    private static final Logger logger = Logger.getLogger(SpringDriverTest.class.getName());
+public class ScriptellaDriverTest extends AbstractTestCase {
+
     public static String global = "";
 
-    public void test() throws EtlExecutorException {
-        newEtlExecutor().execute();
+    public void test() {
+        try {
+            newEtlExecutor().execute();
+        } catch (EtlExecutorException e) {
+            e.printStackTrace();
+        }
         assertEquals("file2_file1.xml_visible\nfile1.xml_visible\nfile2_", global);
     }
 

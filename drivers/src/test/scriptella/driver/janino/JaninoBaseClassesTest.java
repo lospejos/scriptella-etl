@@ -35,7 +35,7 @@ public class JaninoBaseClassesTest extends AbstractTestCase {
      */
     public void testScript() {
         JaninoScript js = new JaninoScript() {
-            protected void execute() throws Exception {
+            protected void execute() {
             }
         };
         js.setParametersCallback(MockParametersCallbacks.SIMPLE);
@@ -47,7 +47,7 @@ public class JaninoBaseClassesTest extends AbstractTestCase {
     public void testQuery() {
         final int[] rows = new int[1]; //just to allow inner classes to modify a variable
         JaninoQuery jq = new JaninoQuery() {
-            protected void execute() throws Exception {
+            protected void execute() {
             }
         };
         //now check a query exposing a row with one column
@@ -84,7 +84,7 @@ public class JaninoBaseClassesTest extends AbstractTestCase {
         jq.next();//2nd row
         jq.next(new String[] {"1", "2"},new Object[] {"v1", "v2"}); //3rd row
         //Now test passing a map
-        Map<String,Object> m = new HashMap<String, Object>();
+        Map<String,Object> m = new HashMap<>();
         m.put("1", "v1");
         m.put("2", "v2");
         jq.set(m);

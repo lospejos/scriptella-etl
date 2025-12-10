@@ -20,8 +20,8 @@ import scriptella.configuration.ScriptEl;
 import scriptella.configuration.ScriptingElement;
 import scriptella.spi.Connection;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -31,7 +31,7 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 public class TxInterceptor extends ElementInterceptor {
-    private static final Logger LOG = Logger.getLogger(TxInterceptor.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(TxInterceptor.class.getName());
     private Location location;
 
     public TxInterceptor(ExecutableElement next, ScriptEl scriptEl) {
@@ -49,9 +49,9 @@ public class TxInterceptor extends ElementInterceptor {
             try {
                 ctxDecorator.c.rollback();
             } catch (Exception e1) {
-                LOG.log(Level.WARNING, "Unable to rollback transaction", e1);
+                LOG.error("Unable to rollback transaction", e1);
             }
-            LOG.log(Level.INFO,
+            LOG.info(
                     "Script " + location + " failed during invocation in a separate transaction", e);
         }
     }

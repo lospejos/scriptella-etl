@@ -32,7 +32,7 @@ public class TextQueryITest extends AbstractTestCase {
 
     private ByteArrayOutputStream out;
 
-    protected void setUp() throws Exception {
+    protected void setUp() {
 
         testURLHandler = new TestURLHandler() {
             public InputStream getInputStream(final URL u) {
@@ -64,7 +64,7 @@ public class TextQueryITest extends AbstractTestCase {
     }
 
 
-    public void test() throws EtlExecutorException, UnsupportedEncodingException {
+    public void test() throws EtlExecutorException {
         EtlExecutor e = newEtlExecutor();
         e.execute();
         assertNotNull(out);

@@ -2,11 +2,10 @@
 <etl>
     <!-- Invoked from ScriptellaDriverITest -->
     <connection driver="script">
-        language=rhino
+        language=groovy
     </connection>
     <script>
-        with(JavaImporter(Packages.scriptella.driver.scriptella)) {
-            ScriptellaDriverITest.global+='file2_';
-        }
+        import scriptella.driver.scriptella.ScriptellaDriverTest;
+        ScriptellaDriverTest.global+='file2_';
     </script>
 </etl>

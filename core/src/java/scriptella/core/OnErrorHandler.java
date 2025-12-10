@@ -47,7 +47,7 @@ public class OnErrorHandler {
     public OnErrorHandler(ScriptEl scriptEl) {
         List<OnErrorEl> onerrorElements = scriptEl.getOnerrorElements();
         if (onerrorElements != null && onerrorElements.size() > 0) {
-            this.onerrorElements = new ArrayList<OnErrorEl>(onerrorElements);
+            this.onerrorElements = new ArrayList<>(onerrorElements);
         }
     }
 

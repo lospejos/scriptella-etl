@@ -47,7 +47,7 @@ public abstract class JaninoScript {
     /**
      * This method in not a part of the public API.
      */
-    protected abstract void execute() throws Exception;
+    protected abstract void execute();
 
 
     /**

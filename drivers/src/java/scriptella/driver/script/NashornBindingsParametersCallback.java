@@ -34,7 +34,7 @@ import java.util.*;
  */
 public class NashornBindingsParametersCallback extends BindingsParametersCallback {
     private Bindings nashornGlobal;
-    private Set<String> exportVars = new HashSet<String>(Arrays.asList("f1", "localProp"));
+    private Set<String> exportVars = new HashSet<>(Arrays.asList("f1", "localProp"));
 
     public NashornBindingsParametersCallback(ParametersCallback parentParameters) {
         super(parentParameters);

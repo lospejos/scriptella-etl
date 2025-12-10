@@ -49,9 +49,9 @@ public class QueryEl extends ScriptingElement {
     }
 
     static List<ScriptingElement> loadScriptingElements(final XmlElement element, QueryEl parent) {
-        final List<XmlElement> elements = element.getChildren(new HashSet<String>(
+        final List<XmlElement> elements = element.getChildren(new HashSet<>(
                 Arrays.asList(QueryEl.TAG_NAME, ScriptEl.TAG_NAME)));
-        List<ScriptingElement> scripts = new ArrayList<ScriptingElement>(elements.size());
+        List<ScriptingElement> scripts = new ArrayList<>(elements.size());
 
         for (XmlElement xmlElement : elements) {
             final Element e = xmlElement.getElement();

@@ -36,7 +36,7 @@ public class SqlTokenizerITest extends DBTestCase {
         Connection con = getConnection("toktest");
         newEtlExecutor().execute();
         //now check the data
-        final Set<String> expectedOrcl = new HashSet<String>(Arrays.asList(new String[] {"222", "333", "444"}));
+        final Set<String> expectedOrcl = new HashSet<>(Arrays.asList(new String[]{"222", "333", "444"}));
         new QueryHelper("select * from TestOrcl").execute(con, new QueryCallback() {
             private int row=1;
             public void processRow(final ParametersCallback parameters) {
@@ -48,7 +48,7 @@ public class SqlTokenizerITest extends DBTestCase {
         });
         assertTrue("The following values were not inserted: "+expectedOrcl, expectedOrcl.isEmpty());
         //now test sybase like script, i.e. go separated
-        final Set<String> expectedSyb = new HashSet<String>(Arrays.asList(new String[] {"quoted go is ignored\n" +
+        final Set<String> expectedSyb = new HashSet<>(Arrays.asList(new String[]{"quoted go is ignored\n" +
                 "        go\n" +
                 "        ", "333", "444"}));
         new QueryHelper("select * from TestSyb").execute(con, new QueryCallback() {

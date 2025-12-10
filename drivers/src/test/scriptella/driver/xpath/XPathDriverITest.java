@@ -34,14 +34,14 @@ import java.util.Map;
  */
 public class XPathDriverITest extends AbstractTestCase {
     private ByteArrayOutputStream o;
-    private Map<String, String> params = new HashMap<String, String>();
+    private Map<String, String> params = new HashMap<>();
 
-    protected void setUp() throws Exception {
+    protected void setUp() {
 
         o = new ByteArrayOutputStream();
         testURLHandler = new TestURLHandler() {
 
-            public InputStream getInputStream(final URL u) throws IOException {
+            public InputStream getInputStream(final URL u) {
                 throw new UnsupportedOperationException();
             }
 
@@ -56,28 +56,28 @@ public class XPathDriverITest extends AbstractTestCase {
     }
 
 
-    public void test1() throws EtlExecutorException, UnsupportedEncodingException {
+    public void test1() throws EtlExecutorException {
         params.put("test", "1");
         EtlExecutor e = newEtlExecutor();
         e.execute();
         assertNotNull(o);
         assertEquals("1;2\n3;4\n5;6\n", new String(o.toByteArray()));
     }
-    public void test2() throws EtlExecutorException, UnsupportedEncodingException {
+    public void test2() throws EtlExecutorException {
         params.put("test", "2");
         EtlExecutor e = newEtlExecutor();
         e.execute();
         assertNotNull(o);
         assertEquals("1;Column2\n", new String(o.toByteArray()));
     }
-    public void test3() throws EtlExecutorException, UnsupportedEncodingException {
+    public void test3() throws EtlExecutorException {
         params.put("test", "3");
         EtlExecutor e = newEtlExecutor();
         e.execute();
         assertNotNull(o);
         assertEquals("2\n", new String(o.toByteArray()));
     }
-    public void test4() throws EtlExecutorException, UnsupportedEncodingException {
+    public void test4() throws EtlExecutorException {
         params.put("test", "4");
         EtlExecutor e = newEtlExecutor();
         e.execute();
@@ -85,7 +85,7 @@ public class XPathDriverITest extends AbstractTestCase {
         assertEquals("1;2\n", new String(o.toByteArray()));
     }
 
-    public void test5() throws EtlExecutorException, UnsupportedEncodingException {
+    public void test5() throws EtlExecutorException {
         params.put("test", "5");
         EtlExecutor e = newEtlExecutor();
         e.execute();
@@ -93,7 +93,7 @@ public class XPathDriverITest extends AbstractTestCase {
         assertEquals("2\n", new String(o.toByteArray()));
     }
 
-    public void test6() throws EtlExecutorException, UnsupportedEncodingException {
+    public void test6() throws EtlExecutorException {
         params.put("test", "6");
         EtlExecutor e = newEtlExecutor();
         e.execute();

@@ -35,11 +35,11 @@ public class PropertiesMap implements Map<String, Object> {
     private Map<String, Object> props;
 
     public PropertiesMap() {
-        props = new LinkedHashMap<String, Object>();
+        props = new LinkedHashMap<>();
     }
 
     public PropertiesMap(int initialCapacity) {
-        props = new LinkedHashMap<String, Object>(initialCapacity);
+        props = new LinkedHashMap<>(initialCapacity);
     }
 
     public PropertiesMap(Map<String, ?> props) {
@@ -146,7 +146,7 @@ public class PropertiesMap implements Map<String, Object> {
         }.load(is);
     }
 
-    
+
 
 
     public String toString() {

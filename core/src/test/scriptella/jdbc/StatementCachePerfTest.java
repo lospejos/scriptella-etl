@@ -74,7 +74,7 @@ public class StatementCachePerfTest extends DBTestCase {
      */
     public void testCacheMiss() throws SQLException {
         //Testing cache miss
-        List<Object> params = new ArrayList<Object>();
+        List<Object> params = new ArrayList<>();
         params.add(1);
 
         for (int i = 0; i < LOOP_COUNT; i++) {
@@ -102,7 +102,7 @@ public class StatementCachePerfTest extends DBTestCase {
      */
     public void testCacheHit() throws SQLException {
         //Testing cache miss
-        List<Object> params = new ArrayList<Object>();
+        List<Object> params = new ArrayList<>();
         params.add(1);
 
         for (int i = 0; i < LOOP_COUNT; i++) {
@@ -117,7 +117,7 @@ public class StatementCachePerfTest extends DBTestCase {
      */
     public void testCacheDisable() throws SQLException {
         //Testing disabled cache
-        List<Object> params = new ArrayList<Object>();
+        List<Object> params = new ArrayList<>();
         params.add(1);
         StatementCache disabled = new TestableStatementCache(null, -1);
 

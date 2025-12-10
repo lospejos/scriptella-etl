@@ -235,7 +235,7 @@ public class ConnectionParameters {
         }
         int lastInd = url.indexOf('?') + 1;
         if (lastInd > 0) {
-            Map<String, String> map = new HashMap<String, String>();
+            Map<String, String> map = new HashMap<>();
             final int urlLength = url.length();
             do {
                 int i = url.indexOf('&', lastInd);

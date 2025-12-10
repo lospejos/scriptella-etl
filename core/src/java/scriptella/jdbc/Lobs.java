@@ -149,7 +149,7 @@ class Lobs {
             }
         }
 
-        public final void free() throws SQLException {
+        public final void free() {
             close();
         }
 

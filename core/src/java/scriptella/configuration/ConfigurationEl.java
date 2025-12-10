@@ -58,7 +58,7 @@ public class ConfigurationEl extends XmlConfigurableBase {
     }
 
     /**
-     * Returns this configuration properties merged with external ones specified in a factory. 
+     * Returns this configuration properties merged with external ones specified in a factory.
      */
     public ParametersCallback getParameters() {
         return parametersCallback;
@@ -90,7 +90,7 @@ public class ConfigurationEl extends XmlConfigurableBase {
 
     void validateScriptingElements(final XmlElement element) {
         //validating scriptingElements
-        Set<String> allowedConIds = new HashSet<String>();
+        Set<String> allowedConIds = new HashSet<>();
         for (ConnectionEl connectionEl : connections) {
             final String cid = connectionEl.getId();
             if (!allowedConIds.add(cid)) {

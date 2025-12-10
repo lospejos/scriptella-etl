@@ -35,7 +35,7 @@ import java.util.List;
  * @version 1.0
  */
 public class EtlExecuteTask extends EtlTaskBase {
-    private List<FileSet> filesets = new ArrayList<FileSet>();
+    private List<FileSet> filesets = new ArrayList<>();
     private final EtlLauncher launcher = new EtlLauncher();
     private String maxmemory;
     private boolean fork;
@@ -88,7 +88,7 @@ public class EtlExecuteTask extends EtlTaskBase {
     }
 
     public void execute() throws BuildException {
-        List<File> files = new ArrayList<File>();
+        List<File> files = new ArrayList<>();
 
         try {
             if (filesets.isEmpty()) { //if no files - use file default name
@@ -121,7 +121,7 @@ public class EtlExecuteTask extends EtlTaskBase {
         launcher.setProgressIndicator(new ConsoleProgressIndicator());
         launcher.setProperties(getProperties());
         launcher.setNoStat(nostat);
-        launcher.setNoJmx(nojmx);
+        launcher.enabledJmx(!nojmx);
 
         setupLogging();
         for (File file : files) {

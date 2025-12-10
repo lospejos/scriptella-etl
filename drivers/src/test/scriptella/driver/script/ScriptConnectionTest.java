@@ -43,6 +43,7 @@ import java.util.Collections;
  * @since 11.01.2007
  */
 public class ScriptConnectionTest extends AbstractTestCase {
+
     private Object v;
 
     public void setValue(Object v) {
@@ -77,7 +78,7 @@ public class ScriptConnectionTest extends AbstractTestCase {
     public void testConfiguration() {
         //JavaScript(ECMAScript) should be used by default
         Connection c = new Driver().connect(new MockConnectionParameters());
-        assertEquals("ECMAScript", c.getDialectIdentifier().getName());
+        assertEquals("Groovy", c.getDialectIdentifier().getName());
         //now tests wrong name
         try {
             new Driver().connect(new MockConnectionParameters(
@@ -107,11 +108,11 @@ public class ScriptConnectionTest extends AbstractTestCase {
     public void testStreamHandling() {
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
         testURLHandler = new TestURLHandler() {
-            public InputStream getInputStream(final URL u) throws IOException {
+            public InputStream getInputStream(final URL u) {
                 return new ByteArrayInputStream("Hello".getBytes());
             }
 
-            public OutputStream getOutputStream(final URL u) throws IOException {
+            public OutputStream getOutputStream(final URL u) {
                 return os;
             }
 
@@ -120,9 +121,10 @@ public class ScriptConnectionTest extends AbstractTestCase {
             }
         };
         Connection c = new Driver().connect(
-                new MockConnectionParameters(Collections.singletonMap(ScriptConnection.ENCODING, "UTF-8"), "tst:/file"));
+                new MockConnectionParameters(Collections.singletonMap(ScriptConnection.ENCODING, "UTF-8"), "tst:/file")
+        );
 
-        c.executeScript(new StringResource("print('Hello '+name)"),
+        c.executeScript(new StringResource("println('Hello '+name)"),
                 MockParametersCallbacks.fromMap(Collections.singletonMap("name", "world")));
         c.close();
         assertEquals("Hello world", os.toString().trim()); //Starting with Java 8, print adds a new line

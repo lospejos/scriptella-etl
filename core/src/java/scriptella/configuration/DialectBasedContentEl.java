@@ -53,7 +53,7 @@ public class DialectBasedContentEl extends XmlConfigurableBase {
 
     public void configure(final XmlElement element) {
         Dialect defaultDialect = null;
-        dialects = new ArrayList<Dialect>();
+        dialects = new ArrayList<>();
         //iterate through the child nodes of this element
         for (Node node = element.getElement().getFirstChild(); node != null; node = node.getNextSibling()) {
             if (isDialectElement(node)) {

@@ -32,8 +32,9 @@ import javax.naming.directory.SearchControls;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Hashtable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents a connection to a directory context.
@@ -43,7 +44,7 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 public class LdapConnection extends AbstractConnection {
-    private static final Logger LOG = Logger.getLogger(LdapConnection.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(LdapConnection.class.getName());
     private DirContext ctx;
     private final SearchControls searchControls; //default search controls
     private final Long maxFileLength;
@@ -105,7 +106,7 @@ public class LdapConnection extends AbstractConnection {
      */
     public LdapConnection(ConnectionParameters parameters) {
         super(Driver.DIALECT, parameters);
-        Hashtable<String, Object> env = new Hashtable<String, Object>();
+        Hashtable<String, Object> env = new Hashtable<>();
         //Put default settings
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         //Put connection settings
@@ -159,8 +160,8 @@ public class LdapConnection extends AbstractConnection {
      * @param env environment to create initial context.
      */
     protected void initializeContext(Hashtable<String, Object> env) {
-        if (LOG.isLoggable(Level.FINE)) {
-            LOG.fine("Creating initial context, environment: " + env);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Creating initial context, environment: " + env);
         }
         try {
             ctx = new InitialDirContext(env);

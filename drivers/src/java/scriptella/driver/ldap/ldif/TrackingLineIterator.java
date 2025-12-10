@@ -78,7 +78,7 @@ public class TrackingLineIterator extends LineIterator {
         if (lines!=null) {
             lines.clear();
         } else {
-            lines=new ArrayList<String>();
+            lines= new ArrayList<>();
         }
         len=0;
     }

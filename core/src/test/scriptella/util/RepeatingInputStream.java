@@ -34,7 +34,7 @@ public class RepeatingInputStream extends InputStream {
         this.count = count;
     }
 
-    public int read() throws IOException {
+    public int read() {
         if (count<=0 || pos >= data.length) {
             count--;
 

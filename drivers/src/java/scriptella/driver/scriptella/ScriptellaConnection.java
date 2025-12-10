@@ -33,8 +33,9 @@ import scriptella.util.StringUtils;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents a connection to externally located Scriptella ETL file.
@@ -44,7 +45,7 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 public class ScriptellaConnection extends AbstractConnection {
-    private static final Logger LOG = Logger.getLogger(ScriptellaConnection.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(ScriptellaConnection.class.getName());
     private ConfigurationFactory configurationFactory = new ConfigurationFactory();
     private DriverContext ctx;
 
@@ -94,14 +95,14 @@ public class ScriptellaConnection extends AbstractConnection {
             LOG.info("Readonly Mode - Skipping ETL file " + u);
         } else {
             try {
-                if (LOG.isLoggable(Level.FINE)) {
-                    LOG.fine("Executing Scriptella ETL file " + u);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Executing Scriptella ETL file " + u);
                 }
                 configurationFactory.setResourceURL(u);
                 configurationFactory.setExternalParameters(callback);
                 ExecutionStatistics st = new EtlExecutor(configurationFactory.createConfiguration()).execute();
-                if (LOG.isLoggable(Level.FINE)) {
-                    LOG.fine("Completed ETL file execution.\n" + st);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Completed ETL file execution.\n" + st);
                 }
             } catch (EtlExecutorException e) {
                 throw new ScriptellaProviderException("Failed to execute script " + u + " : " + e.getMessage(), e);

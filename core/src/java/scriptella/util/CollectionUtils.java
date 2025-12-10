@@ -35,7 +35,7 @@ public final class CollectionUtils {
      * Comparator similar to {@link String#CASE_INSENSITIVE_ORDER}, but
      * handles only ASCII characters
      */
-    private static final Comparator<String> ASCII_CASE_INSENSITIVE_ORDER = new Comparator<String>() {
+    private static final Comparator<String> ASCII_CASE_INSENSITIVE_ORDER = new Comparator<>() {
         public int compare(String s1, String s2) {
             int n1 = s1.length(), n2 = s2.length();
             int n = n1 < n2 ? n1 : n2;
@@ -65,7 +65,7 @@ public final class CollectionUtils {
      * @return case insensitive map.
      */
     public static <V> Map<String, V> newCaseInsensitiveAsciiMap() {
-        return new TreeMap<String, V>(ASCII_CASE_INSENSITIVE_ORDER);
+        return new TreeMap<>(ASCII_CASE_INSENSITIVE_ORDER);
     }
 
     /**

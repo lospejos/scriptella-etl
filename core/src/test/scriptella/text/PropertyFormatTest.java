@@ -76,7 +76,7 @@ public class PropertyFormatTest extends TestCase {
         assertEquals("Value must be trimmed before parsing", d, ci.parse(" \n010112 "));
     }
 
-    public void testTimestampFormat() throws ParseException {
+    public void testTimestampFormat() {
         PropertyFormat ci = new PropertyFormat();
         ci.setType("timestamp");
 
@@ -96,7 +96,7 @@ public class PropertyFormatTest extends TestCase {
         assertEquals("Value with spaces must be parsed", expectedTs, ci.parse(" \n"+expectedStr));
     }
 
-    public void testPad() throws ParseException {
+    public void testPad() {
         PropertyFormat ci = new PropertyFormat();
         ci.setType("number");
         ci.setPattern("0.0");

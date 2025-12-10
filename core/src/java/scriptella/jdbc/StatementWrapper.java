@@ -26,8 +26,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Abstraction for {@link java.sql.Statement} and {@link java.sql.PreparedStatement}.
@@ -36,7 +37,7 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 abstract class StatementWrapper<T extends Statement> implements Closeable {
-    private static final Logger LOG = Logger.getLogger(StatementWrapper.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(StatementWrapper.class.getName());
     protected final JdbcTypesConverter converter;
     protected final T statement;
 
@@ -137,9 +138,7 @@ abstract class StatementWrapper<T extends Statement> implements Closeable {
                 result += r;
             }
         }
-        if (LOG.isLoggable(Level.FINE)) {
-            LOG.fine("Batch of " + results.length + " statements executed.");
-        }
+        LOG.info("Batch of " + results.length + " statements executed.");
         return result;
     }
 

@@ -101,7 +101,7 @@ public class PropertyFormatInfo {
         if (prefix == null) {
             throw new IllegalArgumentException("Null prefix is not allowed - use empty string instead");
         }
-        Map<String, PropertyFormat> map = new HashMap<String, PropertyFormat>();
+        Map<String, PropertyFormat> map = new HashMap<>();
 
         //For null_string, fall back to non-prefix property(1.0 compatibility)
         String nullString = properties.getStringProperty(prefix + NULL_STRING);

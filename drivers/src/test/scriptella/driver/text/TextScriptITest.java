@@ -36,7 +36,7 @@ public class TextScriptITest extends AbstractTestCase {
     private ByteArrayOutputStream o1;
     private ByteArrayOutputStream o2;
 
-    protected void setUp() throws Exception {
+    protected void setUp() {
 
         testURLHandler = new TestURLHandler() {
             public InputStream getInputStream(final URL u) {
@@ -61,7 +61,7 @@ public class TextScriptITest extends AbstractTestCase {
     }
 
 
-    public void test() throws EtlExecutorException, UnsupportedEncodingException {
+    public void test() throws EtlExecutorException {
         EtlExecutor e = newEtlExecutor();
         e.execute();
         assertNotNull(o1);

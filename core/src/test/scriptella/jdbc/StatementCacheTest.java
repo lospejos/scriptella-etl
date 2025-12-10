@@ -82,7 +82,7 @@ public class StatementCacheTest extends DBTestCase {
         preparedCleared = 0;
         preparedParamsSet = 0;
         StringBuilder sb = new StringBuilder();
-        List<Object> params = new ArrayList<Object>();
+        List<Object> params = new ArrayList<>();
         params.add(1);
         for (int i = 0; i < 105; i++) {
             sb.append('.');
@@ -109,7 +109,7 @@ public class StatementCacheTest extends DBTestCase {
 
 
         StringBuilder sb = new StringBuilder();
-        List<Object> params = new ArrayList<Object>();
+        List<Object> params = new ArrayList<>();
         params.add(1);
         for (int i = 0; i < 20; i++) {
             sb.append('.');

@@ -38,7 +38,7 @@ public class LdapConnectionTest extends AbstractTestCase {
      * Tests if LDAP connection correctly initialized.
      */
     public void test() {
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         String dn = "dc=scriptella";
         params.put(LdapConnection.SEARCH_BASEDN_KEY, dn);
         params.put(LdapConnection.SEARCH_SCOPE_KEY, "subtree");

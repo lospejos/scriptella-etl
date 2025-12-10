@@ -65,15 +65,15 @@ public final class QueryExecutor extends ContentExecutor<QueryEl> {
 
     protected void execute(Connection connection, Resource resource, DynamicContext ctx) {
         final QueryCtxDecorator ctxDecorator = new QueryCtxDecorator(ctx);
-        if (debug) {
-            log.fine("Executing query " + getLocation());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Executing query " + getLocation());
         }
         connection.executeQuery(resource, ctx, ctxDecorator);
-        if (debug) {
+        if (LOG.isDebugEnabled()) {
             if (ctxDecorator.rownum == 0) {
-                log.fine("Query " + getLocation() + " returned no results.");
+                LOG.debug("Query " + getLocation() + " returned no results.");
             } else {
-                log.fine("Query " + getLocation() + " processed.");
+                LOG.debug("Query " + getLocation() + " processed.");
             }
 
         }
@@ -94,7 +94,7 @@ public final class QueryExecutor extends ContentExecutor<QueryEl> {
     private final class QueryCtxDecorator extends DynamicContextDecorator implements QueryCallback {
         private ParametersCallback params;
         private int rownum; //current row number
-        private final Map<String, Object> cachedParams = new HashMap<String, Object>();
+        private final Map<String, Object> cachedParams = new HashMap<>();
 
         public QueryCtxDecorator(DynamicContext context) {
             super(context);
@@ -106,8 +106,8 @@ public final class QueryExecutor extends ContentExecutor<QueryEl> {
             rownum++;
             params = parameters;
             cachedParams.clear();
-            if (debug) {
-                log.fine("Processing row #" + rownum + " for query " + getLocation());
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Processing row #" + rownum + " for query " + getLocation());
             }
 
             for (ExecutableElement exec : nestedElements) {

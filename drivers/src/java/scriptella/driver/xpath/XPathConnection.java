@@ -38,11 +38,11 @@ import java.util.Map;
  * @version 1.0
  */
 public class XPathConnection extends AbstractConnection {
-    
+
     /**
      * Name of the <code>cache_queries</code> connection property.
      * Specifies flag to use queries cache, default is true.
-	 * If set to "false" XML document under URL will be parsed for each 
+	 * If set to "false" XML document under URL will be parsed for each
 	 * <query> or <script> tag in etl script. This allows to update XML content dynamically.
      */
     public static final String CACHE_QUERIES = "cache_queries";
@@ -52,13 +52,13 @@ public class XPathConnection extends AbstractConnection {
      * Value of <code>true</code> specifies that variables should return a string array, otherwise a single string is returned.
      */
     public static final String RETURN_ARRAYS = "return_arrays";
-    
+
     static final DocumentBuilderFactory DBF = DocumentBuilderFactory.newInstance();
 
-    private Map<Resource, XPathQueryExecutor> queriesCache = new IdentityHashMap<Resource, XPathQueryExecutor>();
+    private Map<Resource, XPathQueryExecutor> queriesCache = new IdentityHashMap<>();
     private XPathExpressionCompiler compiler = new XPathExpressionCompiler();
     private Document document;
-    private ThreadLocal<Node> queryContext=new ThreadLocal<Node>();
+    private ThreadLocal<Node> queryContext= new ThreadLocal<>();
     private URL url;
     private final boolean returnArrays;
     protected final boolean cache_queries;

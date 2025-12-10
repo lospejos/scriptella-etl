@@ -57,7 +57,7 @@ public class CsvScriptTest extends DBTestCase {
         se.execute();
         final Connection connection = getConnection("csv");
         QueryHelper q = new QueryHelper("SELECT * from Result");
-        final Set<String> expected = new HashSet<String>();
+        final Set<String> expected = new HashSet<>();
         expected.add("1 2 3");expected.add("Col4 5 6");expected.add("7 8 9");
         expected.add("q1"); expected.add("qCol4");//second query filter only first and second rows
         q.execute(connection, new QueryCallback() {

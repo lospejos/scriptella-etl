@@ -30,8 +30,9 @@ import scriptella.util.StringUtils;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents a connection to CSV file.
@@ -42,7 +43,7 @@ import java.util.logging.Logger;
  * @version 1.1
  */
 public class CsvConnection extends AbstractTextConnection {
-    protected static final Logger LOG = Logger.getLogger(CsvConnection.class.getName());
+    protected static final Logger LOG = LoggerFactory.getLogger(CsvConnection.class.getName());
     private CSVWriter out;
     private Writer writer;
 
@@ -121,7 +122,7 @@ public class CsvConnection extends AbstractTextConnection {
             }
 
             if (isReadonly()) {
-                if (LOG.isLoggable(Level.INFO)) {
+                if (LOG.isInfoEnabled()) {
                     LOG.info("Readonly Mode - " + Arrays.deepToString(row) + " has been skipped.");
                 }
             } else {
@@ -196,7 +197,7 @@ public class CsvConnection extends AbstractTextConnection {
                 out.close();
                 writer = null;
             } catch (Exception e) {
-                LOG.log(Level.INFO, "A problem occured while trying to close CSV writer", e);
+                LOG.info("A problem occured while trying to close CSV writer", e);
             }
         }
     }

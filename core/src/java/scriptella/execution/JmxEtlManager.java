@@ -24,8 +24,9 @@ import javax.management.ObjectName;
 import java.lang.management.ManagementFactory;
 import java.util.Date;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of {@link scriptella.execution.JmxEtlManagerMBean}.
@@ -36,7 +37,7 @@ import java.util.logging.Logger;
 @ThreadSafe
 public class JmxEtlManager implements JmxEtlManagerMBean {
 	private static final int MAX_MBEANS_PER_FILE = 1000;
-    private static Logger LOG = Logger.getLogger(JmxEtlManager.class.getName());
+    private static Logger LOG = LoggerFactory.getLogger(JmxEtlManager.class.getName());
     private static final String MBEAN_NAME_PREFIX = "scriptella:type=etl";
     private static volatile MBeanServer mbeanServer;
     private MBeanServer server;
@@ -132,7 +133,7 @@ public class JmxEtlManager implements JmxEtlManagerMBean {
                 srv.invoke(objectName, "cancel", null, null);
                 cancelled++;
             } catch (Exception e) {
-                LOG.log(Level.WARNING, "Cannot cancel ETL, MBean " + objectName, e);
+                LOG.error("Cannot cancel ETL, MBean " + objectName, e);
             }
         }
         return cancelled;
@@ -169,7 +170,7 @@ public class JmxEtlManager implements JmxEtlManagerMBean {
             try {
                 server.unregisterMBean(name);
             } catch (Exception e) {
-                LOG.log(Level.WARNING, "Unable to unregister mbean " + name, e);
+                LOG.error("Unable to unregister mbean " + name, e);
             }
             name = null;
         }

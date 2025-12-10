@@ -15,8 +15,6 @@
  */
 package scriptella.driver.janino;
 
-import org.codehaus.commons.compiler.LocatedException;
-import org.codehaus.janino.ScriptEvaluator;
 import scriptella.expression.LineIterator;
 import scriptella.spi.Resource;
 import scriptella.util.ExceptionUtils;
@@ -26,8 +24,11 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.IdentityHashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.codehaus.commons.compiler.LocatedException;
+import org.codehaus.janino.ScriptEvaluator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Compiles Janino scripts.
@@ -36,12 +37,12 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 final class CodeCompiler {
-    private static final Logger LOG = Logger.getLogger(CodeCompiler.class.getName());
-    private static final boolean DEBUG = LOG.isLoggable(Level.FINE);
+    private static final Logger LOG = LoggerFactory.getLogger(CodeCompiler.class.getName());
+    private static final boolean DEBUG = LOG.isDebugEnabled();
     //Allowed exceptions to be thrown by a script
     private static final Class[] THROWN_EXCEPTIONS = new Class[]{Exception.class};
     //Compiled scripts(Static methods) cache
-    private Map<Resource, Object> objectCache = new IdentityHashMap<Resource, Object>();
+    private Map<Resource, Object> objectCache = new IdentityHashMap<>();
 
     public JaninoScript compileScript(final Resource resource) {
         return (JaninoScript) compile(resource, false);
@@ -104,7 +105,7 @@ final class CodeCompiler {
         // TODO Add propoer support for Janino 3 as part of JDK11 upgrade #31
         } catch (Throwable e) {
             //BUG-36290 Error with Janino 2.6.0
-            LOG.severe("Error statement cannot be determined due to " + e + ". Try upgrading Janino to version 2.6 or newer.");
+            LOG.error("Error statement cannot be determined due to " + e + ". Try upgrading Janino to version 2.6 or newer.");
         }
         return pe;
     }

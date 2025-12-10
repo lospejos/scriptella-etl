@@ -157,7 +157,7 @@ public abstract class XmlConfigurableBase implements XmlConfigurable {
             return null;
         }
 
-        List<T> l = new ArrayList<T>(elements.size());
+        List<T> l = new ArrayList<>(elements.size());
 
         for (XmlElement element : elements) {
             try {

@@ -36,13 +36,13 @@ public class AutocommitITest extends DBTestCase {
     public void test() throws EtlExecutorException {
         Connection con = getConnection("autocommititest");
         newEtlExecutor().execute();
-        final Set<String> ids = new HashSet<String>();
+        final Set<String> ids = new HashSet<>();
         new QueryHelper("select * from tst").execute(con, new QueryCallback() {
             public void processRow(final ParametersCallback parameters) {
                 ids.add(String.valueOf(parameters.getParameter("1")));
             }
         });
-        Set<String> expected = new HashSet<String>(Arrays.asList("1", "2", "3", "4", "5"));
+        Set<String> expected = new HashSet<>(Arrays.asList("1", "2", "3", "4", "5"));
         assertEquals(expected, ids);
 
 

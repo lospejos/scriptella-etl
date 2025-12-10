@@ -50,8 +50,8 @@ final class CachedSqlTokenizer implements SqlTokenizer {
             String st = target.nextStatement();
             if (st != null) {
                 if (statements == null) {
-                    statements = new ArrayList<String>();
-                    injections = new ArrayList<int[]>();
+                    statements = new ArrayList<>();
+                    injections = new ArrayList<>();
                 }
                 statements.add(st);
             }

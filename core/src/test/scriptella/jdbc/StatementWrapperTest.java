@@ -35,7 +35,7 @@ import java.util.Collections;
  * @version 1.1
  */
 public class StatementWrapperTest extends DBTestCase {
-    public void testBatchedPrepared() throws IOException, EtlExecutorException, SQLException {
+    public void testBatchedPrepared() throws EtlExecutorException, SQLException {
         Connection c = getConnection("stmtw");
         EtlExecutor ex = newEtlExecutor();
         ex.execute();
@@ -78,7 +78,7 @@ public class StatementWrapperTest extends DBTestCase {
         assertEquals("Table should contain 9 records", "9", r[0]);
     }
 
-    public void testBatchedSimple() throws IOException, EtlExecutorException, SQLException {
+    public void testBatchedSimple() throws EtlExecutorException, SQLException {
         Connection c = getConnection("stmtw");
         EtlExecutor ex = newEtlExecutor();
         ex.execute();

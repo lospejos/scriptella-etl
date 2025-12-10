@@ -30,8 +30,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -68,7 +69,7 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 public class EtlExecutor implements Runnable, Callable<ExecutionStatistics> {
-    private static final Logger LOG = Logger.getLogger(EtlExecutor.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(EtlExecutor.class.getName());
     private ConfigurationEl configuration;
     private boolean jmxEnabled;
     private boolean suppressStatistics;
@@ -185,7 +186,11 @@ public class EtlExecutor implements Runnable, Callable<ExecutionStatistics> {
             commitAll(ctx);
         } catch (Throwable e) {
             if (ctx != null) {
-                rollbackAll(ctx);
+                try {
+                    rollbackAll(ctx);
+                } catch (Exception ex) {
+                    LOG.warn("Rollback faiure " + e);
+                }
             }
             throw new EtlExecutorException(e);
         } finally {
@@ -206,7 +211,7 @@ public class EtlExecutor implements Runnable, Callable<ExecutionStatistics> {
         try {
             ctx.session.rollback();
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Unable to rollback script", e);
+            LOG.error("Unable to rollback script", e);
         }
     }
 

@@ -284,7 +284,7 @@ public class LdifScriptTest extends AbstractTestCase {
     /**
      * Tests error handling
      */
-    public void testErrorHadnling() throws NamingException {
+    public void testErrorHadnling() {
         String ldif = "dn: cn=ldap,dc=scriptella\n" +
                 "changetype: delete\n";
         Reader reader = new StringReader(ldif);

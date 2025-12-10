@@ -39,7 +39,7 @@ public class PropertiesSubstitutorTest extends AbstractTestCase {
         assertEquals(exp, s);
     }
 
-    public void test() throws IOException {
+    public void test() {
         PropertiesSubstitutor ps = new PropertiesSubstitutor(MockParametersCallbacks.SIMPLE);
         String expression = "$$ Text${subst1}${subst2}$subst3$subst4 End of test";
         String s = ps.substitute(expression);
@@ -47,7 +47,7 @@ public class PropertiesSubstitutorTest extends AbstractTestCase {
         assertEquals(expected, s);
     }
 
-    public void testNullProperties() throws IOException {
+    public void testNullProperties() {
         PropertiesSubstitutor ps = new PropertiesSubstitutor(MockParametersCallbacks.NULL);
         String exp = "$$ Text${subst1}${subst2}$subst3$subst4 End of test";
         String s = ps.substitute(exp);

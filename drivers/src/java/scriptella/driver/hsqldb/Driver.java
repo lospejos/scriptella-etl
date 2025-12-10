@@ -23,8 +23,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Scriptella Adapter for HSLQDB database.
@@ -35,7 +36,7 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 public class Driver extends GenericDriver {
-    private static final Logger LOG = Logger.getLogger(Driver.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(Driver.class.getName());
     public static final String HSQLDB_DRIVER_NAME = "org.hsqldb.jdbcDriver";
 
     private static Map<String, HsqlConnection> lastConnections = null; //Send SHUTDOWN on JVM exit to fix
@@ -52,7 +53,7 @@ public class Driver extends GenericDriver {
                     try {
                         entry.getValue().shutdown();
                     } catch (Exception e) {
-                        LOG.log(Level.WARNING, "Problem occured while trying to shutdown an in-process HSQLDB database " + entry.getKey(), e);
+                        LOG.error("Problem occured while trying to shutdown an in-process HSQLDB database " + entry.getKey(), e);
                     }
                 }
                 lastConnections = null;
@@ -81,7 +82,7 @@ public class Driver extends GenericDriver {
      */
     static synchronized HsqlConnection setLastConnection(HsqlConnection connection) {
         if (lastConnections == null) {
-            lastConnections = new HashMap<String, HsqlConnection>();
+            lastConnections = new HashMap<>();
         }
         final HsqlConnection old = lastConnections.put(getConnectionURL(connection), connection);
         if (!hookAdded) {
@@ -95,7 +96,7 @@ public class Driver extends GenericDriver {
         try {
             return connection.getNativeConnection().getMetaData().getURL();
         } catch (Exception e) {
-            LOG.log(Level.WARNING, "Unable to read connection meta data", e);
+            LOG.error("Unable to read connection meta data", e);
             return "";
         }
     }

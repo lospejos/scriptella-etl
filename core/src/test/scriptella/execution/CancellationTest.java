@@ -32,7 +32,7 @@ import java.sql.SQLException;
 public class CancellationTest extends DBTestCase {
     private boolean interrupted;
 
-    public void test() throws EtlExecutorException {
+    public void test() {
         EtlExecutor etlExecutor = newEtlExecutor();
         Connection c = getConnection("cancelTest");
         final Thread etlThread = Thread.currentThread();

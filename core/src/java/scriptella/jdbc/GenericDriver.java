@@ -23,8 +23,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Generic adapter for JDBC drivers.
@@ -34,16 +35,16 @@ import java.util.logging.Logger;
  */
 public class GenericDriver extends AbstractScriptellaDriver {
 
-    private static final Logger LOG = Logger.getLogger(GenericDriver.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(GenericDriver.class.getName());
 
     static {
         //Redirects DriverManager's logging
-        final Logger LOG = Logger.getLogger("scriptella.DriverManagerLog");
-        if (LOG.isLoggable(Level.FINE)) {
+        final Logger LOG = LoggerFactory.getLogger("scriptella.Driver.LOG");
+        if (LOG.isDebugEnabled()) {
             if (DriverManager.getLogWriter() == null) {
                 DriverManager.setLogWriter(new PrintWriter(System.out) {
                     public void println(String s) {
-                        LOG.fine(s);
+                        LOG.debug(s);
                     }
                 });
 
@@ -60,7 +61,7 @@ public class GenericDriver extends AbstractScriptellaDriver {
     protected void loadDrivers(String... drivers) {
         if (drivers.length > 0) {
             Throwable throwable = null;
-            final boolean debug = LOG.isLoggable(Level.FINE);
+            final boolean debug = LOG.isDebugEnabled();
             for (String name : drivers) {
                 try {
                     try {
@@ -69,7 +70,7 @@ public class GenericDriver extends AbstractScriptellaDriver {
                         Class.forName(name, true, Thread.currentThread().getContextClassLoader());
                     }
                     if (debug) {
-                        LOG.fine("Found driver class " + name);
+                        LOG.debug("Found driver class " + name);
                     }
                     throwable = null;
                     break;
@@ -78,7 +79,7 @@ public class GenericDriver extends AbstractScriptellaDriver {
                         throwable = t;
                     } else {
                         if (debug) {
-                            LOG.log(Level.FINE, "Failed to load driver class " + name, t);
+                            LOG.debug("Failed to load driver class " + name, t);
                         }
                     }
                 }

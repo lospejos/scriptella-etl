@@ -59,7 +59,7 @@ public class ScriptDriverITest extends AbstractTestCase {
 
     protected ConfigurationFactory newConfigurationFactory() {
         ConfigurationFactory cf = new ConfigurationFactory();
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("callback", this);
         map.put("testNr", testNumber);
         cf.setExternalParameters(map);
@@ -68,10 +68,11 @@ public class ScriptDriverITest extends AbstractTestCase {
 
     public void notify(Number i) {
         if (testNumber == 1) {
-            assertTrue("For test #1 i must be in [0,9] interval", i != null && i.intValue() >= 0 && i.intValue() < 10);
+            assertTrue("For test #1 i must be in [0,9] interval",
+                    i != null && i.intValue() >= 0 && i.intValue() < 10);
         }
         if (testNumber == 2) {
-            assertTrue("For test #2 i must be null", i == null);
+            assertNull("For test #2 i must be null", i);
         }
         this.i = i;
     }

@@ -20,7 +20,8 @@ import scriptella.spi.Connection;
 import scriptella.spi.ConnectionParameters;
 import scriptella.spi.DialectIdentifier;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Scriptella Driver for <a href="http://jakarta.apache.org/velocity">Velocity</a> template engine.
@@ -30,7 +31,7 @@ import java.util.logging.Logger;
  */
 public class Driver extends AbstractScriptellaDriver {
     static final DialectIdentifier DIALECT = new DialectIdentifier("Velocity", "1.4");
-    static final Logger LOG = Logger.getLogger(Driver.class.getName());
+    static final Logger LOG = LoggerFactory.getLogger(Driver.class.getName());
 
 
     public Driver() {

@@ -40,7 +40,7 @@ public class JmxEtlManagerTest extends AbstractTestCase {
 
 	public static final int NUMBER_OF_THREADS = 5;
 
-	public void testRegistration() throws MalformedURLException, MalformedObjectNameException {
+	public void testRegistration() throws MalformedURLException {
         EtlContext ctx = new EtlContext();
         ctx.setBaseURL(new URL("file:/tmp"));
         JmxEtlManager m = new JmxEtlManager(ctx);
@@ -98,7 +98,7 @@ public class JmxEtlManagerTest extends AbstractTestCase {
 	public void testParallelExecution() throws MalformedURLException, InterruptedException {
 		final URL url = new URL("file:/tmp");
 		final ExecutorService ex = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
-		final List<Throwable> exceptions = new CopyOnWriteArrayList<Throwable>();
+		final List<Throwable> exceptions = new CopyOnWriteArrayList<>();
 		final AtomicInteger cnt = new AtomicInteger();
 		for (int i = 0; i < NUMBER_OF_THREADS; i++) {
 			ex.submit(new Runnable() {

@@ -35,16 +35,16 @@ import java.util.List;
  * @see scriptella.driver.script.ScriptingQueryITest
  */
 public class JexlQueryITest extends AbstractTestCase {
-    private List<Integer> results = new ArrayList<Integer>();
-    private TestLoggingConfigurer loggingConfigurer = new TestLoggingConfigurer(MissingQueryNextCallDetector.class.getName());
+    private final List<Integer> results = new ArrayList<>();
+    private final TestLoggingConfigurer loggingConfigurer = new TestLoggingConfigurer(MissingQueryNextCallDetector.class.getName());
 
     @Override
-    protected void setUp() throws Exception {
+    protected void setUp() {
         loggingConfigurer.setUp();
     }
 
     @Override
-    protected void tearDown() throws Exception {
+    protected void tearDown() {
         loggingConfigurer.tearDown();
     }
 

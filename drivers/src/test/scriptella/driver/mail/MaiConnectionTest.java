@@ -41,7 +41,7 @@ public class MaiConnectionTest extends AbstractTestCase {
      */
     public void testText() {
 
-        Map<String, String> parameters = new HashMap<String, String>();
+        Map<String, String> parameters = new HashMap<>();
         ConnectionParameters cp = new ConnectionParameters(new MockConnectionEl(parameters,
                 "mailto:scriptella@gmail.com"), MockDriverContext.INSTANCE);
         MailConnection mc = new MailConnection(cp) {
@@ -64,7 +64,7 @@ public class MaiConnectionTest extends AbstractTestCase {
      */
     public void testHtml() {
 
-        Map<String, String> parameters = new HashMap<String, String>();
+        Map<String, String> parameters = new HashMap<>();
         parameters.put("type", "html");
         ConnectionParameters cp = new ConnectionParameters(new MockConnectionEl(parameters,
                 "mailto:scriptella@gmail.com?subject=Hello"), MockDriverContext.INSTANCE);
@@ -86,7 +86,7 @@ public class MaiConnectionTest extends AbstractTestCase {
     }
 
     public void testValidation() {
-        Map<String, String> parameters = new HashMap<String, String>();
+        Map<String, String> parameters = new HashMap<>();
         ConnectionParameters cp = new ConnectionParameters(new MockConnectionEl(parameters,
                 null), MockDriverContext.INSTANCE);
         try {
@@ -110,10 +110,10 @@ public class MaiConnectionTest extends AbstractTestCase {
      * Tests mailto with bind variables
      */
     public void testDynamicMailto() {
-        Map<String, String> parameters = new HashMap<String, String>();
+        Map<String, String> parameters = new HashMap<>();
         ConnectionParameters cp = new ConnectionParameters(new MockConnectionEl(parameters,
                 "mailto:$address?subject=$subject"), MockDriverContext.INSTANCE);
-        final Map<String,String> params = new HashMap<String, String>();
+        final Map<String,String> params = new HashMap<>();
         MailConnection mc = new MailConnection(cp) {
             @Override
             protected void send(MimeMessage message) {

@@ -73,7 +73,7 @@ public class CsvConnectionTest extends AbstractTestCase {
 
     public void testQuery() {
         //Create a configuration with non default values
-        Map<String, String> props = new HashMap<String, String>();
+        Map<String, String> props = new HashMap<>();
         props.put(CsvConnection.ENCODING, "UTF8");
         props.put(CsvConnection.EOL, "\r\n");
         props.put(CsvConnection.HEADERS, "false");
@@ -114,7 +114,7 @@ public class CsvConnectionTest extends AbstractTestCase {
 
     public void testScript() throws UnsupportedEncodingException {
         //Create a configuration with non default values
-        Map<String, String> props = new HashMap<String, String>();
+        Map<String, String> props = new HashMap<>();
         props.put(CsvConnection.ENCODING, "UTF8");
         props.put(CsvConnection.EOL, "\r\n");
         props.put(CsvConnection.QUOTE, "");
@@ -133,7 +133,7 @@ public class CsvConnectionTest extends AbstractTestCase {
     }
 
     public void testEscape() throws UnsupportedEncodingException {
-        Map<String, String> props = new HashMap<String, String>();
+        Map<String, String> props = new HashMap<>();
         props.put(CsvConnection.ESCAPE, "'");
         ConnectionParameters cp = new MockConnectionParameters(props, "tst://file");
 
@@ -149,7 +149,7 @@ public class CsvConnectionTest extends AbstractTestCase {
     }
 
     public void testQuoteall() throws UnsupportedEncodingException {
-        Map<String, String> props = new HashMap<String, String>();
+        Map<String, String> props = new HashMap<>();
         props.put(CsvConnection.QUOTEALL, "false");
         ConnectionParameters cp = new MockConnectionParameters(props, "tst://file");
 
@@ -169,7 +169,7 @@ public class CsvConnectionTest extends AbstractTestCase {
      */
     public void testNoTrim() {
         //Create a configuration with non default values
-        Map<String, String> props = new HashMap<String, String>();
+        Map<String, String> props = new HashMap<>();
         props.put(CsvConnection.TRIM, "no");
         props.put(CsvConnection.QUOTE, "");
         props.put(CsvConnection.EOL, "\r\n");
@@ -196,7 +196,7 @@ public class CsvConnectionTest extends AbstractTestCase {
 
     public void testAutoFlush() {
         //Create a configuration with non default values
-        Map<String, String> props = new HashMap<String, String>();
+        Map<String, String> props = new HashMap<>();
         props.put(CsvConnection.FLUSH, "true");
         props.put(CsvConnection.QUOTE, "");
         ConnectionParameters cp = new MockConnectionParameters(props, "tst://file");
@@ -210,14 +210,14 @@ public class CsvConnectionTest extends AbstractTestCase {
 
     public void testNullStringScript() {
         //Create a configuration with non default values
-        Map<String, String> props = new HashMap<String, String>();
+        Map<String, String> props = new HashMap<>();
         props.put(AbstractTextConnection.NULL_STRING, "");
         props.put(CsvConnection.QUOTE, "");
         ConnectionParameters cp = new MockConnectionParameters(props, "tst://file");
 
         CsvConnection con = new CsvConnection(cp);
         String str = "$a,$b,$c";
-        props = new HashMap<String, String>();
+        props = new HashMap<>();
         props.put("a", "1");
         props.put("c", "2");
         con.executeScript(new StringResource(str), MockParametersCallbacks.fromMap(props));
@@ -227,14 +227,14 @@ public class CsvConnectionTest extends AbstractTestCase {
 
     public void testNullStringQuery() {
         //Create a configuration with non default values
-        Map<String, String> props = new HashMap<String, String>();
+        Map<String, String> props = new HashMap<>();
         props.put(AbstractTextConnection.NULL_STRING, "");
         props.put(CsvConnection.HEADERS, "false");
         ConnectionParameters cp = new MockConnectionParameters(props, "tst://file");
 
         CsvConnection con = new CsvConnection(cp);
         testCsvInput= "a,,c";
-        final Map<String, Object> map = new HashMap<String, Object>();
+        final Map<String, Object> map = new HashMap<>();
         con.executeQuery(new StringResource(""), MockParametersCallbacks.SIMPLE, new QueryCallback() {
             @Override
             public void processRow(ParametersCallback parameters) {
@@ -257,7 +257,7 @@ public class CsvConnectionTest extends AbstractTestCase {
      */
     public void testSkipLines() {
         //Create a configuration with non default values
-        Map<String, String> props = new HashMap<String, String>();
+        Map<String, String> props = new HashMap<>();
         props.put(CsvConnection.SKIP_LINES, "2");
         ConnectionParameters cp = new ConnectionParameters(new MockConnectionEl(props, "tst://file"), MockDriverContext.INSTANCE);
 

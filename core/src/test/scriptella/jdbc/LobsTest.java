@@ -90,7 +90,7 @@ public class LobsTest extends AbstractTestCase {
 
     }
 
-    public void testUrlBlob() throws IOException, SQLException {
+    public void testUrlBlob() throws IOException {
         testURLHandler = new TestURLHandler() {
             public InputStream getInputStream(final URL u) {
                 return new ByteArrayInputStream(bsob);

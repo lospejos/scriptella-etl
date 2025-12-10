@@ -40,10 +40,11 @@ import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents a JavaMail connection.
@@ -59,7 +60,7 @@ import java.util.regex.Pattern;
  * @version 1.0
  */
 public class MailConnection extends AbstractConnection {
-    private static final Logger LOG = Logger.getLogger(MailConnection.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(MailConnection.class.getName());
 
     /**
      * Name of the <code>type</code> connection property.
@@ -119,13 +120,13 @@ public class MailConnection extends AbstractConnection {
         }
         subject = properties.getProperty(SUBJECT);
         if (subject == null) {
-            LOG.fine("EMail subject is not set for connection!");
+            LOG.info("EMail subject is not set for connection!");
         }
 
         session = Session.getInstance(properties);
 
-        if (LOG.isLoggable(Level.FINE)) {
-            LOG.fine("Mail session initialized");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Mail session initialized");
         }
     }
 
@@ -147,12 +148,12 @@ public class MailConnection extends AbstractConnection {
         }
 
         if (isReadonly()) {
-            if (LOG.isLoggable(Level.INFO)) {
+            if (LOG.isInfoEnabled()) {
                 LOG.info("Readonly Mode - Not sending a message to " + addresslist);
             }
         } else {
-            if (LOG.isLoggable(Level.FINE)) {
-                LOG.fine("Sending a message to " + addresslist);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Sending a message to " + addresslist);
             }
             try {
                 send(mimeMessage);

@@ -41,7 +41,7 @@ public class OnErrorTest extends DBTestCase {
         EtlExecutor se = newEtlExecutor();
         se.execute();
         QueryHelper q = new QueryHelper("select * from test");
-        final Map<Integer, String> expected = new LinkedHashMap<Integer, String>();
+        final Map<Integer, String> expected = new LinkedHashMap<>();
         expected.put(1, "Updated1");
         expected.put(2, "Updated2");
         expected.put(3, "Updated3");
@@ -83,7 +83,7 @@ public class OnErrorTest extends DBTestCase {
     /**
      * BUG-193124 Error during script execution causes an infinite loop for an onerror handler with retry enabled
      */
-    public void testRetry() throws EtlExecutorException, InterruptedException {
+    public void testRetry() throws InterruptedException {
       ExecutorService es = Executors.newFixedThreadPool(1);
 
       EtlExecutor etlExecutor = newEtlExecutor(getClass().getSimpleName()+"3.xml");

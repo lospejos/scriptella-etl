@@ -35,15 +35,15 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Reader;
-import java.io.Writer;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Scriptella connection adapter for the JSR 223: Scripting for the Java Platform.
@@ -54,12 +54,13 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 public class ScriptConnection extends AbstractConnection {
-    private static final Logger LOG = Logger.getLogger(ScriptConnection.class.getName());
+
+    private static final Logger LOG = LoggerFactory.getLogger(ScriptConnection.class.getName());
     private Map<Resource, CompiledScript> cache;
     private ScriptEngineWrapper engineWrapper;
     private String encoding;
     private URL url;
-    private Writer out;
+    // private Writer out;
     /**
      * Name of the <code>language</code> connection property.
      */
@@ -71,7 +72,6 @@ public class ScriptConnection extends AbstractConnection {
      */
     static final String ENCODING = "encoding";
 
-
     /**
      * Instantiates a new connection to JSR 223 scripting engine.
      *
@@ -82,8 +82,8 @@ public class ScriptConnection extends AbstractConnection {
         String lang = parameters.getStringProperty(LANGUAGE);
         ScriptEngineManager scriptEngineManager = new ScriptEngineManager(ScriptConnection.class.getClassLoader());
         if (StringUtils.isEmpty(lang)) { //JavaScript is used by default
-            LOG.fine("Script language was not specified. JavaScript is default.");
-            lang = "js";
+            LOG.info("Script language was not specified. Groovy is default.");
+            lang = "groovy";
         }
 
         ScriptEngine engine = scriptEngineManager.getEngineByName(lang);
@@ -91,24 +91,28 @@ public class ScriptConnection extends AbstractConnection {
             throw new ConfigurationException("Specified " + LANGUAGE + "=" + lang + " not supported. Available values are: " +
                     getAvailableEngines(scriptEngineManager));
         }
-        engineWrapper = new ScriptEngineWrapper(engine);
-        LOG.fine("Script engine selected: " + engine.getFactory().getEngineName());
+        engineWrapper = new ScriptEngineWrapper(lang, engine);
+        LOG.debug("Script engine selected: " + engine.getFactory().getEngineName());
         if (engineWrapper.isCompilable()) {
             cache = new IdentityHashMap<>();
         } else {
             LOG.info("Engine " + engine.getFactory().getEngineName() + " does not support compilation. Running in interpreted mode.");
         }
         if (engineWrapper.isNashornScriptEngine()) {
-            LOG.warning("Nashorn JavaScript Engine is not fully supported. \n" +
+            LOG.warn("Nashorn JavaScript Engine is not fully supported. " +
                     "See https://github.com/scriptella/scriptella-etl/issues/2 for status and workarounds.");
         }
         if (!StringUtils.isEmpty(parameters.getUrl())) { //if url is specified
             url = parameters.getResolvedUrl();
             //setUp reader and writer for it
             ScriptContext ctx = engine.getContext();
-            ctx.setReader(new LazyReader());
-            //JS engine bug - we have to wrap with PrintWriter, because otherwise print function won't work.
-            ctx.setWriter(new PrintWriter(new LazyWriter()));
+            try {
+                ctx.setReader(IOUtils.getReader(url.openConnection().getInputStream(), encoding));
+                //JS engine bug - we have to wrap with PrintWriter, because otherwise print function won't work.
+                ctx.setWriter(IOUtils.getWriter(url.openConnection().getOutputStream(), encoding));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         encoding = parameters.getCharsetProperty(ENCODING);
         ScriptEngineFactory f = engine.getFactory();
@@ -122,7 +126,7 @@ public class ScriptConnection extends AbstractConnection {
      * @return list of languages each of them represented by a list of names..
      */
     static List<List<String>> getAvailableEngines(ScriptEngineManager manager) {
-        List<List<String>> list = new ArrayList<List<String>>();
+        List<List<String>> list = new ArrayList<>();
         for (ScriptEngineFactory scriptEngineFactory : manager.getEngineFactories()) {
             list.add(scriptEngineFactory.getNames());
         }
@@ -157,6 +161,7 @@ public class ScriptConnection extends AbstractConnection {
                 try {
                     cache.put(resource, script = engineWrapper.compile(resource.open()));
                 } catch (ScriptException e) {
+                    LOG.error(e.getMessage(), e);
                     throw new ScriptProviderException("Failed to compile script", e, getErrorStatement(resource, e));
                 }
             }
@@ -182,7 +187,6 @@ public class ScriptConnection extends AbstractConnection {
         return null;
     }
 
-
     /**
      * Closes the connection and releases all related resources.
      */
@@ -195,6 +199,7 @@ public class ScriptConnection extends AbstractConnection {
      * Lazily initialized reader.
      */
     final class LazyReader extends Reader {
+
         private Reader r;
 
         public int read(char cbuf[], int off, int len) throws IOException {
@@ -209,32 +214,7 @@ public class ScriptConnection extends AbstractConnection {
                 r.close();
             }
         }
-    }
 
-    /**
-     * Lazily initialized writer which appends chars to an URL stream.
-     */
-    final class LazyWriter extends Writer {
-
-        public void write(char cbuf[], int off, int len) throws IOException {
-            if (out == null) {
-                out = IOUtils.getWriter(IOUtils.getOutputStream(url), encoding);
-            }
-            out.write(cbuf, off, len);
-        }
-
-        public void flush() throws IOException {
-            if (out != null) {
-                out.flush();
-            }
-        }
-
-        public void close() throws IOException {
-            if (out != null) {
-                out.close();
-            }
-
-        }
     }
 
 }

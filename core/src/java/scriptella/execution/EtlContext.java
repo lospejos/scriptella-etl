@@ -51,7 +51,7 @@ public class EtlContext implements ParametersCallback, DriverContext {
 
     public EtlContext(boolean collectStatistics) {
         statisticsBuilder = collectStatistics?new ExecutionStatisticsBuilder(): new SilentExecutionStatisticsBuilder();
-        globalVariables = new HashMap<String, Object>();
+        globalVariables = new HashMap<>();
     }
 
     public Object getParameter(final String name) {

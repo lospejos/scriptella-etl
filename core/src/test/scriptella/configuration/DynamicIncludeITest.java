@@ -35,7 +35,7 @@ public class DynamicIncludeITest extends DBTestCase {
     public void test() throws EtlExecutorException {
         newEtlExecutor().execute();
         QueryHelper qh = new QueryHelper("SELECT * FROM Data");
-        final Set<Integer> expected = new HashSet<Integer>(Arrays.asList(1, 2, -1));
+        final Set<Integer> expected = new HashSet<>(Arrays.asList(1, 2, -1));
 
         qh.execute(getConnection("dynamicInclude"), new QueryCallback() {
             public void processRow(final ParametersCallback parameters) {

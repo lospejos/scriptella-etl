@@ -25,8 +25,9 @@ import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchResult;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents an executor for LDAP search filter query(RFC 2254).
@@ -40,7 +41,7 @@ import java.util.logging.Logger;
  * @version 1.0
  */
 public class SearchFilterQuery implements ParametersCallback {
-    private static final Logger LOG = Logger.getLogger(SearchFilterQuery.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(SearchFilterQuery.class.getName());
     private QueryCallback queryCallback;
 
     private SearchResult result;
@@ -88,8 +89,8 @@ public class SearchFilterQuery implements ParametersCallback {
     public void execute(final String filter) {
         //Using standard properties substitutor, may be change to something similar to JDBC parameters
         final String sFilter = substitutor.substitute(filter);
-        if (LOG.isLoggable(Level.FINE)) {
-            LOG.fine("Running a query for search filter " + sFilter);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Running a query for search filter " + sFilter);
         }
         try {
             iterate(query(connection, sFilter));
@@ -111,8 +112,8 @@ public class SearchFilterQuery implements ParametersCallback {
         try {
             while (ne.hasMoreElements()) {
                 result = ne.nextElement();
-                if (LOG.isLoggable(Level.FINE)) {
-                    LOG.fine("Processing search result: " + result);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Processing search result: " + result);
                 }
                 queryCallback.processRow(this); //notifying a callback
             }
@@ -120,7 +121,7 @@ public class SearchFilterQuery implements ParametersCallback {
             try {//closing naming enumeration in case of unexpected error
                 ne.close();
             } catch (Exception e) {
-                LOG.log(Level.FINE, "Failed to close naming enumeration", e);
+                LOG.debug("Failed to close naming enumeration", e);
             }
         }
     }

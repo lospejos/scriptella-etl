@@ -42,8 +42,8 @@ public abstract class DBTestCase extends AbstractTestCase {
         }
     }
 
-    private Collection<String> dbNames = new HashSet<String>();
-    private Collection<Connection> connections = new ArrayList<Connection>();
+    private Collection<String> dbNames = new HashSet<>();
+    private Collection<Connection> connections = new ArrayList<>();
 
     protected Connection getConnection(final String db) {
         dbNames.add(db);

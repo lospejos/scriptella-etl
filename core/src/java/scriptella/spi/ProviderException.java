@@ -29,7 +29,7 @@ import java.util.Set;
  * @version 1.0
  */
 public abstract class ProviderException extends SystemException {
-    private Set<String> errorCodes = new LinkedHashSet<String>();
+    private Set<String> errorCodes = new LinkedHashSet<>();
     private String errorStatement;
 
     public ProviderException() {

@@ -56,7 +56,7 @@ public class SearchFilterQueryTest extends AbstractTestCase {
 
         SearchFilterQuery q = new SearchFilterQuery(null, MockParametersCallbacks.UNSUPPORTED, qc) {
             protected NamingEnumeration<SearchResult> query(final LdapConnection connection, final String filter) {
-                List<SearchResult> res = new ArrayList<SearchResult>();
+                List<SearchResult> res = new ArrayList<>();
                 for (int i=0;i<2;i++) {
                     BasicAttributes a = new BasicAttributes("uid","uid"+i);
                     a.put("cn", "search"+i);
@@ -65,7 +65,7 @@ public class SearchFilterQueryTest extends AbstractTestCase {
                     res.add(sr);
                 }
                 final Iterator<SearchResult> it = res.iterator();
-                return new NamingEnumeration<SearchResult>() {
+                return new NamingEnumeration<>() {
 
                     public SearchResult next() {
                         return it.next();
@@ -76,7 +76,7 @@ public class SearchFilterQueryTest extends AbstractTestCase {
                     }
 
                     public void close() {
-                        closed=true;
+                        closed = true;
                     }
 
                     public boolean hasMoreElements() {

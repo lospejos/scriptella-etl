@@ -38,8 +38,8 @@ public class ConnectionParametersTest extends AbstractTestCase {
     /**
      * Tests if properties parsing methods work correctly.
      */
-    public void testPropertiesParsing() throws ParseException, MalformedURLException, URISyntaxException {
-        Map<String, Object> p = new HashMap<String, Object>();
+    public void testPropertiesParsing() throws MalformedURLException, URISyntaxException {
+        Map<String, Object> p = new HashMap<>();
         p.put("int", 10);
         p.put("negative", -10);
         p.put("int2", " 20");

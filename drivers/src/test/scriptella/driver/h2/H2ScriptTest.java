@@ -43,14 +43,14 @@ public class H2ScriptTest extends AbstractTestCase {
      * @throws SQLException
      * @throws ClassNotFoundException
      */
-    public void test() throws EtlExecutorException, SQLException, ClassNotFoundException, IOException {
+    public void test() throws EtlExecutorException, SQLException, ClassNotFoundException {
         Class.forName("org.h2.Driver");
         //Opening a connection before executing a script to disable shutdown on last connection close.
         Connection con = DriverManager.getConnection("jdbc:h2:mem:tst");
         EtlExecutor se = newEtlExecutor();
         se.execute();
         ResultSet rs = con.createStatement().executeQuery("SELECT * FROM Test ORDER BY ID");
-        List<Integer> actual = new ArrayList<Integer>();
+        List<Integer> actual = new ArrayList<>();
         while (rs.next()) {
             Integer n = (Integer) rs.getObject(1);
             actual.add(n);

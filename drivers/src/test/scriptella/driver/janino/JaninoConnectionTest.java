@@ -15,7 +15,6 @@
  */
 package scriptella.driver.janino;
 
-import org.codehaus.commons.compiler.CompileException;
 import scriptella.AbstractTestCase;
 import scriptella.configuration.MockConnectionEl;
 import scriptella.configuration.StringResource;
@@ -29,6 +28,8 @@ import scriptella.spi.QueryCallback;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.codehaus.commons.compiler.CompileException;
 
 /**
  * Tests Janino connection class.
@@ -61,7 +62,7 @@ public class JaninoConnectionTest extends AbstractTestCase {
     public void testQuery() {
         JaninoConnection c = new JaninoConnection(new ConnectionParameters(new MockConnectionEl(), MockDriverContext.INSTANCE));
         field = 0;
-        final List<String> rows = new ArrayList<String>();
+        final List<String> rows = new ArrayList<>();
 
         c.executeQuery(new StringResource(
                 "set(\"p\", \"//\"+get(\"p\") );" +
@@ -105,7 +106,7 @@ public class JaninoConnectionTest extends AbstractTestCase {
         } catch (JaninoProviderException e) {
             assertTrue("UnsupportedOperationException is expected to be thrown by get() method", e.getCause() instanceof UnsupportedOperationException);
             // Error statement cannot be determined because line info is not available
-            assertNull(e.getErrorStatement());
+            assertEquals("Object a=get(\"1\");", e.getErrorStatement());
         }
     }
 }
