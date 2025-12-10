@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Java CI with Maven
+name: Java CI with Maven (Java 25)
 
 on:
   push:
@@ -11,16 +11,31 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
+    container:
+      image: bellsoft/liberica-openjdk-debian:25
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 8
-      uses: actions/setup-java@v2
-      with:
-        java-version: '8'
-        distribution: 'temurin'
-        cache: maven
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      - uses: actions/checkout@v4
+
+      - name: Install Maven and enable cache
+        run: |
+          MAVEN_VERSION=3.9.9
+          MAVEN_HOME=/opt/apache-maven-${MAVEN_VERSION}
+          if [ ! -d "$MAVEN_HOME" ]; then
+            curl -fsSL https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz | tar -xz -C /opt
+          fi
+          echo "$MAVEN_HOME/bin" >> $GITHUB_PATH
+          echo "M2_HOME=$MAVEN.Home" >> $GITHUB_ENV
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
