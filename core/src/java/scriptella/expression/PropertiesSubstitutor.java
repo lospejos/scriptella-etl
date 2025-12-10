@@ -17,6 +17,7 @@ package scriptella.expression;
 
 import scriptella.spi.ParametersCallback;
 import scriptella.spi.support.MapParametersCallback;
+import scriptella.util.HexUtils;
 import scriptella.util.IOUtils;
 
 import java.io.BufferedReader;
@@ -30,7 +31,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.bind.DatatypeConverter;
+//import jakarta.xml.bind.DatatypeConverter;
 
 
 /**
@@ -175,7 +176,7 @@ public class PropertiesSubstitutor {
                     {  //todo - test? lstefek
                         java.sql.Blob blob = (java.sql.Blob)par;
                         byte[] bdata = blob.getBytes(1, (int) blob.length());
-                        v = DatatypeConverter.printBase64Binary(bdata);
+                        v = HexUtils.printHexBinary(bdata); //DatatypeConverter.printBase64Binary(bdata);
                     }
                     catch (SQLException e)
                     {   e.printStackTrace();
