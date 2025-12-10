@@ -1,0 +1,39 @@
+name: Publish Release Artifacts
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # Используем легковесный JDK-образ
+    container:
+      image: eclipse-temurin:25-jdk-slim
+      options: --user root  # иногда нужно для установки пакетов (но не обязательно здесь)
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Maven
+        run: |
+          MAVEN_VERSION=3.9.9
+          MAVEN_URL=https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz
+          curl -fsSL -o maven.tar.gz "$MAVEN_URL"
+          tar -xzf maven.tar.gz -C /opt
+          ln -s /opt/apache-maven-${MAVEN_VERSION} /opt/maven
+          echo "/opt/maven/bin" >> $GITHUB_PATH
+
+      - name: Build with Maven
+        run: mvn -B -V clean package -DskipTests
+
+      - name: Upload JAR to Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/*.jar
+          asset_name: app.jar
+          tag: ${{ github.event.release.tag_name }}
+          overwrite: true
